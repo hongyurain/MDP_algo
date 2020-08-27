@@ -7,9 +7,14 @@ public class Robot {
 			LEFT, UP, RIGHT, DOWN
 	}
 	private Direction curDir = Direction.RIGHT;
+	private boolean leftClear;
+	private boolean rightClear;
+	private boolean frontClear;
+	
 	
 	public Robot(int row, int col) {
 		this.cell = new Cell(row, col);
+		updateSensors();
 	}
 	
 	public String getCurCellID() {
@@ -18,6 +23,18 @@ public class Robot {
 	
 	public Cell getCurCell() {
 		return this.cell;
+	}
+	
+	public boolean getLeftClear() {
+		return this.leftClear;
+	}
+	
+	public boolean getRightClear() {
+		return this.rightClear;
+	}
+	
+	public boolean getFrontClear() {
+		return this.frontClear;
 	}
 	
 	public void moveForward() {
@@ -34,6 +51,7 @@ public class Robot {
 		case DOWN:
 			this.cell = new Cell(row, col+1);
 		}
+		//updateSensors()
 	}
 	
 	public void rotateRight() {
@@ -62,6 +80,14 @@ public class Robot {
 		}
 	}
 	
+	public void updateSensors() {
+		//add code to update the boolean sensors every time this function is called
+		//this function will be called every time the bot moves e.g. moveForward()
+		//----------
+		
+		
+		//----------
+	}
 	
 	
 }

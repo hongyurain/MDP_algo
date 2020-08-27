@@ -27,7 +27,16 @@ public class main {
 		while (!map.checkFullyExplored()) {
 			curRow = robot.getCurCell().getRow();
 			curCol = robot.getCurCell().getCol();
-			
+			if (!robot.getLeftClear()) {
+				robot.rotateLeft();
+				robot.moveForward();
+			}
+			else if (!robot.getFrontClear()) {
+				robot.moveForward();
+			}
+			else {
+				robot.rotateRight();
+			}
 		}		
 	}
 
