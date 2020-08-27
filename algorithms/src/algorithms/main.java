@@ -1,5 +1,4 @@
 package algorithms;
-import java.util.concurrent.TimeUnit;
 
 public class main {
 
@@ -20,7 +19,7 @@ public class main {
 		
 	}
 	
-	// Algorithm to hug left wall
+	// Algorithm to hug left wall (INCOMPLETE)
 	public void exploreArea(Robot robot, Map map) {
 		int curRow;
 		int curCol;
