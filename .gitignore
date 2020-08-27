@@ -1,0 +1,6 @@
+/.metadata/
+algorithms/.metadata/
+.metadata/.lock
+*.zip
+*.db
+*.log
