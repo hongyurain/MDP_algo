@@ -58,6 +58,10 @@ public class Cell {
 		return this.isVirtualWall;
 	}
 	
+	public void updateExplored() {
+		this.isExplored = true;
+	}
+	
 	public boolean getIsExplored() {
 		return this.isExplored;
 	}

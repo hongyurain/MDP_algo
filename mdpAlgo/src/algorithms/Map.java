@@ -3,9 +3,9 @@ import java.lang.*;
 
 public class Map {
 	
-	private int numRows= 15;
-	private int numCols = 20;
-	private static Cell[][] grid = new Cell[15][20];
+	private int numRows= 15; //CONSTANT
+	private int numCols = 20; //CONSTANT
+	public static Cell[][] grid = new Cell[15][20];
 	
 	public Map() {
 		for (int i=0; i<15; i++) {
