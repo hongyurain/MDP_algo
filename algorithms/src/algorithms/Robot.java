@@ -2,45 +2,66 @@ package algorithms;
 
 
 public class Robot {
+	private Cell cell;
+	private enum Direction {
+			LEFT, UP, RIGHT, DOWN
+	}
+	private Direction curDir = Direction.RIGHT;
 	
-	private String curPos;
-	private String curDir;
-	private Map map = new Map();
+	public Robot(int row, int col) {
+		this.cell = new Cell(row, col);
+	}
 	
-	public Robot(String position, String direction) {
-		this.curPos = position;
-		this.curDir = direction;
+	public String getCurCellID() {
+		return this.cell.getCellID();
+	}
+	
+	public Cell getCurCell() {
+		return this.cell;
 	}
 	
 	public void moveForward() {
-		System.out.println("Moving forward!");
+		int row = this.cell.getRow();
+		int col = this.cell.getCol();
 		
-		int[] index = map.getIndex(this.curPos);
 		switch(this.curDir) {
-		case "up": this.curPos = map.grid[index[0]-1][index[1]]; break;
-		case "right": this.curPos = map.grid[index[0]][index[1]+1]; break;
-		case "down": this.curPos = map.grid[index[0]+1][index[1]]; break;
-		case "left": this.curPos = map.grid[index[0]][index[1]-1]; break;	
+		case LEFT:
+			this.cell = new Cell(row-1, col);
+		case UP:
+			this.cell = new Cell(row, col-1);
+		case RIGHT:
+			this.cell = new Cell(row+1, col);
+		case DOWN:
+			this.cell = new Cell(row, col+1);
 		}
 	}
 	
 	public void rotateRight() {
-		System.out.println("Rotating right!");
 		switch(this.curDir) {
-		case "up": this.curDir = "right"; break;
-		case "right": this.curDir = "down"; break;
-		case "down": this.curDir = "left"; break;
-		case "left": this.curDir = "up"; break;
+		case LEFT:
+			this.curDir = Direction.UP;
+		case UP:
+			this.curDir = Direction.RIGHT;
+		case RIGHT:
+			this.curDir = Direction.DOWN;
+		case DOWN:
+			this.curDir = Direction.LEFT;
 		}
-		System.out.println("New direction: " + this.curDir);
 	}
 	
-	public String getPos() {
-		return this.curPos;
+	public void rotateLeft() {
+		switch(this.curDir) {
+		case LEFT:
+			this.curDir = Direction.DOWN;
+		case UP:
+			this.curDir = Direction.LEFT;
+		case RIGHT:
+			this.curDir = Direction.UP;
+		case DOWN:
+			this.curDir = Direction.RIGHT;
+		}
 	}
 	
-	public String getDir() {
-		return this.curDir;
-	}
+	
 	
 }

@@ -3,55 +3,55 @@ import java.lang.*;
 
 public class Map {
 	
-	public String[][] grid = new String[15][20];
-	private String[] walls = new String[300];
-	private int wallsize = 0;
+	private int numRows= 15;
+	private int numCols = 20;
+	private static Cell[][] grid = new Cell[15][20];
 	
 	public Map() {
-		char letter = 'A';
 		for (int i=0; i<15; i++) {
 			for (int j=0; j<20; j++) {
-				String str = letter + Integer.toString(j);
-				this.grid[i][j] =  str;
+				grid[i][j] = new Cell(i, j);
 			}
-			letter++;
+		}
+		// Initialize virtual walls for the outer border
+		for (int i=0; i<15; i++) {
+			grid[i][0].updateVirtual(true);
+			grid[i][this.numCols-1].updateVirtual(true);
+		}
+		for (int j=0; j<20; j++) {
+			grid[0][j].updateVirtual(true);
+			grid[this.numRows-1][j].updateVirtual(true);
 		}
 	}
 	
 	public void printGrid() {
 		for (int i=0; i<15; i++) {
 			for (int j=0; j<20; j++) {
-				System.out.print(this.grid[i][j]+" ");
+				System.out.print(this.grid[i][j].getCellID() +" ");
 			}
 			System.out.println();
 		}
 	}
 	
-	public void addWalls(String obs) {
-		this.walls[this.wallsize] = obs;
-		this.wallsize++;
-	}
-	
-	public void printWalls() {
-		System.out.println("----------------------------------------------------------------");
-		for (int i=0; i<wallsize; i++) {
-			System.out.println(walls[i] + " ");
+	public void printVirtual() {
+		for (int i=0; i<15; i++) {
+			for (int j=0; j<20; j++) {
+				if (grid[i][j].getIsVirtualWall()) {
+					System.out.print(this.grid[i][j].getCellID() + " ");
+				}
+			}
 		}
-		System.out.println("----------------------------------------------------------------");
 	}
 	
-	public int[] getIndex(String pos) {
-		int[] index = new int[2];
-		
-		int no = pos.charAt(0);
-		index[0] = no - 65;
-		String str = pos.substring(1);
-		index[1] = Integer.parseInt(str);
-		return index;
-	}
-	
-	public String[][] getMap() {
-		return grid;
+	public boolean checkFullyExplored() {
+		for (int i=0; i<15; i++) {
+			for (int j=0; j<20; j++) {
+				if (!grid[i][j].getIsExplored()) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
 
