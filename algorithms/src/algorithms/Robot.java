@@ -2,45 +2,92 @@ package algorithms;
 
 
 public class Robot {
+	private Cell cell;
+	private enum Direction {
+			LEFT, UP, RIGHT, DOWN
+	}
+	private Direction curDir = Direction.RIGHT;
+	private boolean leftClear;
+	private boolean rightClear;
+	private boolean frontClear;
 	
-	private String curPos;
-	private String curDir;
-	private Map map = new Map();
 	
-	public Robot(String position, String direction) {
-		this.curPos = position;
-		this.curDir = direction;
+	public Robot(int row, int col) {
+		this.cell = new Cell(row, col);
+		updateSensors();
+	}
+	
+	public String getCurCellID() {
+		return this.cell.getCellID();
+	}
+	
+	public Cell getCurCell() {
+		return this.cell;
+	}
+	
+	public boolean getLeftClear() {
+		return this.leftClear;
+	}
+	
+	public boolean getRightClear() {
+		return this.rightClear;
+	}
+	
+	public boolean getFrontClear() {
+		return this.frontClear;
 	}
 	
 	public void moveForward() {
-		System.out.println("Moving forward!");
+		int row = this.cell.getRow();
+		int col = this.cell.getCol();
 		
-		int[] index = map.getIndex(this.curPos);
 		switch(this.curDir) {
-		case "up": this.curPos = map.grid[index[0]-1][index[1]]; break;
-		case "right": this.curPos = map.grid[index[0]][index[1]+1]; break;
-		case "down": this.curPos = map.grid[index[0]+1][index[1]]; break;
-		case "left": this.curPos = map.grid[index[0]][index[1]-1]; break;	
+		case LEFT:
+			this.cell = new Cell(row-1, col);
+		case UP:
+			this.cell = new Cell(row, col-1);
+		case RIGHT:
+			this.cell = new Cell(row+1, col);
+		case DOWN:
+			this.cell = new Cell(row, col+1);
 		}
+		//updateSensors()
 	}
 	
 	public void rotateRight() {
-		System.out.println("Rotating right!");
 		switch(this.curDir) {
-		case "up": this.curDir = "right"; break;
-		case "right": this.curDir = "down"; break;
-		case "down": this.curDir = "left"; break;
-		case "left": this.curDir = "up"; break;
+		case LEFT:
+			this.curDir = Direction.UP;
+		case UP:
+			this.curDir = Direction.RIGHT;
+		case RIGHT:
+			this.curDir = Direction.DOWN;
+		case DOWN:
+			this.curDir = Direction.LEFT;
 		}
-		System.out.println("New direction: " + this.curDir);
 	}
 	
-	public String getPos() {
-		return this.curPos;
+	public void rotateLeft() {
+		switch(this.curDir) {
+		case LEFT:
+			this.curDir = Direction.DOWN;
+		case UP:
+			this.curDir = Direction.LEFT;
+		case RIGHT:
+			this.curDir = Direction.UP;
+		case DOWN:
+			this.curDir = Direction.RIGHT;
+		}
 	}
 	
-	public String getDir() {
-		return this.curDir;
+	public void updateSensors() {
+		//add code to update the boolean sensors every time this function is called
+		//this function will be called every time the bot moves e.g. moveForward()
+		//----------
+		
+		
+		//----------
 	}
+	
 	
 }
