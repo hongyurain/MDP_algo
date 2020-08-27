@@ -1,5 +1,8 @@
-package algorithms;
+package map;
 import java.lang.*;
+
+import robot.Robot;
+import robot.RobotConstant;
 
 public class Map {
 	

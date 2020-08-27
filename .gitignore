@@ -4,3 +4,4 @@ algorithms/.metadata/
 *.zip
 *.db
 *.log
+/.recommenders/

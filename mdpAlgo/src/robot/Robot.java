@@ -1,4 +1,10 @@
-package algorithms;
+package robot;
+
+import map.Map;
+import map.MapConstant;
+import map.Cell;
+import robot.RobotConstant.Direction;
+
 
 public class Robot {
 	private int row;
@@ -7,9 +13,6 @@ public class Robot {
 	// Cell information of the robot
 	private Cell cell;
 	
-	public enum Direction {
-			LEFT, UP, RIGHT, DOWN
-	}
 	public Direction curDir = Direction.RIGHT;
 	
 	

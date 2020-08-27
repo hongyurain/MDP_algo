@@ -1,4 +1,4 @@
-package algorithms;
+package map;
 
 public class Cell {
 	private final int row;

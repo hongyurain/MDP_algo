@@ -1,4 +1,8 @@
-package algorithms;
+package simulation;
+
+import map.Map;
+import robot.Robot;
+
 
 public class main {
 
