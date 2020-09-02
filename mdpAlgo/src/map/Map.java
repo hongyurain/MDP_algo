@@ -4,6 +4,11 @@ import java.lang.*;
 import robot.Robot;
 import robot.RobotConstant;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class Map {
 	
 	private int numRows= 15; //CONSTANT
@@ -46,16 +51,30 @@ public class Map {
 		}
 	}
 	
+	// getIsVirtualWall should be removed
 	public boolean checkFullyExplored() {
 		for (int i=0; i<15; i++) {
 			for (int j=0; j<20; j++) {
-				if (!grid[i][j].getIsExplored()) {
+				if (!grid[i][j].getIsExplored() && !grid[i][j].getIsVirtualWall()) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
+	
+	public void resetRobotPos() {
+		for (int i=0; i<15; i++) {
+			for (int j=0; j<20; j++) {
+				grid[i][j].setRobotHead(false);
+			}
+		}
+	}
+	
+	public void addButton(JPanel panel, int row, int col) {
+		panel.add(grid[row][col].getButton());
+	}
+
 }
 
 //A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 A18 A19 

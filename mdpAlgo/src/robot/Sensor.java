@@ -27,7 +27,8 @@ public class Sensor {
         this.sensorPosCol = col;
         this.sensorDir = dir;
     }
+     
     
-    //
+    
     
 }

@@ -1,12 +1,21 @@
 package map;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class Cell {
 	private final int row;
 	private final int col;
 	private boolean isExplored;
 	private boolean isVirtualWall;
 	private boolean isObstacle;
+	private boolean isTraveled;
 	private String cellID;
+	private boolean isRobotHead;
+	
+	private JButton button;
 	
 	public Cell(int row, int col) {
 		this.row = row;
@@ -15,6 +24,8 @@ public class Cell {
 		this.isVirtualWall = false;
 		this.isObstacle = false;
 		setID(row, col);
+		
+		this.button = new JButton();
 	}
 	
 	private void setID(int row, int col) {
@@ -37,6 +48,7 @@ public class Cell {
 	
 	public void updateObstacle(boolean val) {
 		this.isObstacle = val;
+		this.button.setBackground(Color.BLACK);
 	}
 	
 	public boolean getIsObstacle() {
@@ -58,11 +70,34 @@ public class Cell {
 		return this.isVirtualWall;
 	}
 	
+	public void updateTraveled() {
+		this.isTraveled = true;
+		this.button.setBackground(Color.red);
+	}
+	
+	public boolean getIsTraveled() {
+		return this.isTraveled;
+	}
+	
 	public void updateExplored() {
 		this.isExplored = true;
+		if (!this.isObstacle && !this.isVirtualWall && !this.isTraveled) {
+			this.button.setBackground(Color.BLUE);
+		}
+		else if (this.isVirtualWall) {
+			this.button.setBackground(Color.DARK_GRAY);
+		}
 	}
 	
 	public boolean getIsExplored() {
 		return this.isExplored;
+	}
+	
+	public JButton getButton() {
+		return this.button;
+	}
+	
+	public void setRobotHead(boolean val) {
+		this.isRobotHead = val;
 	}
 }

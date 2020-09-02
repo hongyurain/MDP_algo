@@ -21,11 +21,13 @@ public class Robot {
 	private boolean frontClear;
 	
 	
+	
 	public Robot(int row, int col) {
 		this.row = row;
 		this.col = col;
 		this.cell = new Cell(row, col);
 		Map.grid[this.row][this.col].updateExplored();
+		Map.grid[this.row][this.col].updateTraveled();
 		updateSensors();
 	}
 	
@@ -74,7 +76,54 @@ public class Robot {
 		}
 		this.cell = new Cell(this.row, this.col);
 		updateSensors();
-		Map.grid[this.row][this.col].updateExplored();
+		this.discoverCellsSim();
+	}
+	
+	/**
+	 *  FOR THE SIMULATION ONLY!!!!
+	 *  Below diagram shows how the sensors are named
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  			  (s3_1) (s2_1) (s1_1)
+	 *  			  (s3_0) (s2_0) (s1_0)
+	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) (s6_0) (s6_1) (s6_2) (s6_3) (s6_4)
+	 *                (ROBO) (ROBO) (ROBO)
+	 *  (s5_1) (s5_0) (ROBO) (ROBO) (ROBO)
+	 *  
+	 */
+	private void discoverCellsSim() {
+		// Updates cell traveled and explored		
+		//Map.grid[this.row-1][this.col-1].updateTraveled();
+		Map.grid[this.row-1][this.col-1].updateExplored();	
+		
+		//Map.grid[this.row-1][this.col].updateTraveled();
+		Map.grid[this.row-1][this.col].updateExplored();	
+		
+		//Map.grid[this.row-1][this.col+1].updateTraveled();
+		Map.grid[this.row-1][this.col+1].updateExplored();	
+	
+		//Map.grid[this.row][this.col-1].updateTraveled();
+		Map.grid[this.row][this.col-1].updateExplored();	
+	
+		Map.grid[this.row][this.col].updateTraveled();
+		Map.grid[this.row][this.col].updateExplored();	
+		
+		//Map.grid[this.row][this.col+1].updateTraveled();
+		Map.grid[this.row][this.col+1].updateExplored();	
+		
+		//Map.grid[this.row+1][this.col-1].updateTraveled();
+		Map.grid[this.row+1][this.col-1].updateExplored();	
+		
+		//Map.grid[this.row+1][this.col].updateTraveled();
+		Map.grid[this.row+1][this.col].updateExplored();	
+		
+		//Map.grid[this.row+1][this.col+1].updateTraveled();
+		Map.grid[this.row+1][this.col+1].updateExplored();	
+		
+		
+		
 	}
 	
 	public void rotateRight() {
@@ -128,11 +177,12 @@ public class Robot {
 	// FAKE SENSORS -----------------------------------------------------------------------------------
 	
 	public boolean checkLeftSim() {
+		
 		switch(this.curDir) {
 		case DOWN:
 			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row][this.col+1].getIsExplored() ||
+					Map.grid[this.row][this.col+1].getIsTraveled() ||
 					Map.grid[this.row][this.col+1].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col+1].getIsVirtualWall()
@@ -140,7 +190,7 @@ public class Robot {
 		case RIGHT:
 			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row-1][this.col].getIsExplored() ||
+					Map.grid[this.row-1][this.col].getIsTraveled() ||
 					Map.grid[this.row-1][this.col].getIsVirtualWall() 
 					//Map.grid[this.row-1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col-1].getIsVirtualWall()
@@ -148,7 +198,7 @@ public class Robot {
 		case UP:
 			return (//Map.grid[this.row-1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col-1].getIsVirtualWall() ||
-					Map.grid[this.row][this.col-1].getIsExplored() ||
+					Map.grid[this.row][this.col-1].getIsTraveled() ||
 					Map.grid[this.row][this.col-1].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
@@ -156,7 +206,7 @@ public class Robot {
 		case LEFT:
 			return (//Map.grid[this.row+1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row+1][this.col].getIsExplored() ||
+					Map.grid[this.row+1][this.col].getIsTraveled() ||
 					Map.grid[this.row+1][this.col].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
@@ -171,7 +221,7 @@ public class Robot {
 		case RIGHT:
 			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row][this.col+1].getIsExplored() ||
+					Map.grid[this.row][this.col+1].getIsTraveled() ||
 					Map.grid[this.row][this.col+1].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col+1].getIsVirtualWall()
@@ -179,7 +229,7 @@ public class Robot {
 		case UP:
 			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row-1][this.col].getIsExplored() ||
+					Map.grid[this.row-1][this.col].getIsTraveled() ||
 					Map.grid[this.row-1][this.col].getIsVirtualWall() 
 					//Map.grid[this.row-1][this.col-1].getIsExplored() || 
 					//Map.grid[this.row-1][this.col-1].getIsVirtualWall()
@@ -187,7 +237,7 @@ public class Robot {
 		case LEFT:
 			return (//Map.grid[this.row-1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col-1].getIsVirtualWall() ||
-					Map.grid[this.row][this.col-1].getIsExplored() ||
+					Map.grid[this.row][this.col-1].getIsTraveled() ||
 					Map.grid[this.row][this.col-1].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
@@ -195,7 +245,7 @@ public class Robot {
 		case DOWN:
 			return (//Map.grid[this.row+1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row+1][this.col].getIsExplored() ||
+					Map.grid[this.row+1][this.col].getIsTraveled() ||
 					Map.grid[this.row+1][this.col].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
@@ -210,7 +260,7 @@ public class Robot {
 		case UP:
 			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row][this.col+1].getIsExplored() ||
+					Map.grid[this.row][this.col+1].getIsTraveled() ||
 					Map.grid[this.row][this.col+1].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col+1].getIsVirtualWall()
@@ -218,7 +268,7 @@ public class Robot {
 		case LEFT:
 			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row-1][this.col].getIsExplored() ||
+					Map.grid[this.row-1][this.col].getIsTraveled() ||
 					Map.grid[this.row-1][this.col].getIsVirtualWall()
 					//Map.grid[this.row-1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col-1].getIsVirtualWall()
@@ -226,7 +276,7 @@ public class Robot {
 		case DOWN:
 			return (//Map.grid[this.row-1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row-1][this.col-1].getIsVirtualWall() ||
-					Map.grid[this.row][this.col-1].getIsExplored() ||
+					Map.grid[this.row][this.col-1].getIsTraveled() ||
 					Map.grid[this.row][this.col-1].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
@@ -234,7 +284,7 @@ public class Robot {
 		case RIGHT:
 			return (//Map.grid[this.row+1][this.col+1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col+1].getIsVirtualWall() ||
-					Map.grid[this.row+1][this.col].getIsExplored() ||
+					Map.grid[this.row+1][this.col].getIsTraveled() ||
 					Map.grid[this.row+1][this.col].getIsVirtualWall() 
 					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
 					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
