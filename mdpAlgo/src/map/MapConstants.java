@@ -1,7 +1,12 @@
 package map;
 
-public class MapConstant {
-	public static final int MAP_SIZE = 300;     // total num of cells
+/**
+ * Constants used in the Map class.
+ */
+
+
+public class MapConstants {
+    public static final int MAP_SIZE = 300;     // total num of cells
     public static final int MAP_ROWS = 20;      // total num of rows
     public static final int MAP_COLS = 15;      // total num of cols
     public static final int GOAL_ROW = 18;      // row no. of goal cell
