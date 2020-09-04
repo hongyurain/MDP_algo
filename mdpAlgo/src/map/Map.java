@@ -1,94 +1,228 @@
 package map;
-import java.lang.*;
 
 import robot.Robot;
-import robot.RobotConstant;
+//import robot.RobotConstants;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-public class Map {
-	
-	private int numRows= 15; //CONSTANT
-	private int numCols = 20; //CONSTANT
-	public static Cell[][] grid = new Cell[15][20];
-	
-	public Map() {
-		for (int i=0; i<15; i++) {
-			for (int j=0; j<20; j++) {
-				grid[i][j] = new Cell(i, j);
-			}
-		}
-		// Initialize virtual walls for the outer border
-		for (int i=0; i<15; i++) {
-			grid[i][0].updateVirtual(true);
-			grid[i][this.numCols-1].updateVirtual(true);
-		}
-		for (int j=0; j<20; j++) {
-			grid[0][j].updateVirtual(true);
-			grid[this.numRows-1][j].updateVirtual(true);
-		}
-	}
-	
-	public void printGrid() {
-		for (int i=0; i<15; i++) {
-			for (int j=0; j<20; j++) {
-				System.out.print(this.grid[i][j].getCellID() +" ");
-			}
-			System.out.println();
-		}
-	}
-	
-	public void printVirtual() {
-		for (int i=0; i<15; i++) {
-			for (int j=0; j<20; j++) {
-				if (grid[i][j].getIsVirtualWall()) {
-					System.out.print(this.grid[i][j].getCellID() + " ");
-				}
-			}
-		}
-	}
-	
-	// getIsVirtualWall should be removed
-	public boolean checkFullyExplored() {
-		for (int i=0; i<15; i++) {
-			for (int j=0; j<20; j++) {
-				if (!grid[i][j].getIsExplored() && !grid[i][j].getIsVirtualWall()) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	public void resetRobotPos() {
-		for (int i=0; i<15; i++) {
-			for (int j=0; j<20; j++) {
-				grid[i][j].setRobotHead(false);
-			}
-		}
-	}
-	
-	public void addButton(JPanel panel, int row, int col) {
-		panel.add(grid[row][col].getButton());
-	}
+/**
+ * Represents the entire map grid for the arena.
+ */
 
+public class Map extends JPanel {
+    private final Cell[][] grid;
+    private final Robot bot;
+
+    /**
+     * Initialises a Map object with a grid of Cell objects.
+     */
+    public Map(Robot bot) {
+        this.bot = bot;
+
+        grid = new Cell[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col] = new Cell(row, col);
+
+                // Set the virtual walls of the arena
+                if (row == 0 || col == 0 || row == MapConstants.MAP_ROWS - 1 || col == MapConstants.MAP_COLS - 1) {
+                    grid[row][col].setVirtualWall(true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns true if the row and column values are valid.
+     */
+    public boolean checkValidCoordinates(int row, int col) {
+        return row >= 0 && col >= 0 && row < MapConstants.MAP_ROWS && col < MapConstants.MAP_COLS;
+    }
+
+    /**
+     * Returns true if the row and column values are in the start zone.
+     */
+    private boolean inStartZone(int row, int col) {
+        return row >= 0 && row <= 2 && col >= 0 && col <= 2;
+    }
+
+    /**
+     * Returns true if the row and column values are in the goal zone.
+     */
+    private boolean inGoalZone(int row, int col) {
+        return (row <= MapConstants.GOAL_ROW + 1 && row >= MapConstants.GOAL_ROW - 1 && col <= MapConstants.GOAL_COL + 1 && col >= MapConstants.GOAL_COL - 1);
+    }
+
+    /**
+     * Returns a particular cell in the grid.
+     */
+    public Cell getCell(int row, int col) {
+        return grid[row][col];
+    }
+
+    /**
+     * Returns true if a cell is an obstacle.
+     */
+    public boolean isObstacleCell(int row, int col) {
+        return grid[row][col].getIsObstacle();
+    }
+
+    /**
+     * Returns true if a cell is a virtual wall.
+     */
+    public boolean isVirtualWallCell(int row, int col) {
+        return grid[row][col].getIsVirtualWall();
+    }
+
+    /**
+     * Sets all cells in the grid to an explored state.
+     */
+    public void setAllExplored() {
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                grid[row][col].setIsExplored(true);
+            }
+        }
+    }
+
+    /**
+     * Sets all cells in the grid to an unexplored state except for the START & GOAL zone.
+     */
+    public void setAllUnexplored() {
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                if (inStartZone(row, col) || inGoalZone(row, col)) {
+                    grid[row][col].setIsExplored(true);
+                } else {
+                    grid[row][col].setIsExplored(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets a cell as an obstacle and the surrounding cells as virtual walls or resets the cell and surrounding
+     * virtual walls.
+     */
+    public void setObstacleCell(int row, int col, boolean obstacle) {
+        if (obstacle && (inStartZone(row, col) || inGoalZone(row, col)))
+            return;
+
+        grid[row][col].setIsObstacle(obstacle);
+
+        if (row >= 1) {
+            grid[row - 1][col].setVirtualWall(obstacle);            // bottom cell
+
+            if (col < MapConstants.MAP_COLS - 1) {
+                grid[row - 1][col + 1].setVirtualWall(obstacle);    // bottom-right cell
+            }
+
+            if (col >= 1) {
+                grid[row - 1][col - 1].setVirtualWall(obstacle);    // bottom-left cell
+            }
+        }
+
+        if (row < MapConstants.MAP_ROWS - 1) {
+            grid[row + 1][col].setVirtualWall(obstacle);            // top cell
+
+            if (col < MapConstants.MAP_COLS - 1) {
+                grid[row + 1][col + 1].setVirtualWall(obstacle);    // top-right cell
+            }
+
+            if (col >= 1) {
+                grid[row + 1][col - 1].setVirtualWall(obstacle);    // top-left cell
+            }
+        }
+
+        if (col >= 1) {
+            grid[row][col - 1].setVirtualWall(obstacle);            // left cell
+        }
+
+        if (col < MapConstants.MAP_COLS - 1) {
+            grid[row][col + 1].setVirtualWall(obstacle);            // right cell
+        }
+    }
+
+    /**
+     * Returns true if the given cell is out of bounds or an obstacle.
+     */
+    public boolean getIsObstacleOrWall(int row, int col) {
+        return !checkValidCoordinates(row, col) || getCell(row, col).getIsObstacle();
+    }
+
+//    /**
+//     * Overrides JComponent's paintComponent() method. It creates a two-dimensional array of _DisplayCell objects
+//     * to store the current map state. Then, it paints square cells for the grid with the appropriate colors as
+//     * well as the robot on-screen.
+//     */
+//    public void paintComponent(Graphics g) {
+//        // Create a two-dimensional array of _DisplayCell objects for rendering.
+//        _DisplayCell[][] _mapCells = new _DisplayCell[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
+//        for (int mapRow = 0; mapRow < MapConstants.MAP_ROWS; mapRow++) {
+//            for (int mapCol = 0; mapCol < MapConstants.MAP_COLS; mapCol++) {
+//                _mapCells[mapRow][mapCol] = new _DisplayCell(mapCol * GraphicsConstants.CELL_SIZE, mapRow * GraphicsConstants.CELL_SIZE, GraphicsConstants.CELL_SIZE);
+//            }
+//        }
+//
+//        // Paint the cells with the appropriate colors.
+//        for (int mapRow = 0; mapRow < MapConstants.MAP_ROWS; mapRow++) {
+//            for (int mapCol = 0; mapCol < MapConstants.MAP_COLS; mapCol++) {
+//                Color cellColor;
+//
+//                if (inStartZone(mapRow, mapCol))
+//                    cellColor = GraphicsConstants.C_START;
+//                else if (inGoalZone(mapRow, mapCol))
+//                    cellColor = GraphicsConstants.C_GOAL;
+//                else {
+//                    if (!grid[mapRow][mapCol].getIsExplored())
+//                        cellColor = GraphicsConstants.C_UNEXPLORED;
+//                    else if (grid[mapRow][mapCol].getIsObstacle())
+//                        cellColor = GraphicsConstants.C_OBSTACLE;
+//                    else
+//                        cellColor = GraphicsConstants.C_FREE;
+//                }
+//
+//                g.setColor(cellColor);
+//                g.fillRect(_mapCells[mapRow][mapCol].cellX + GraphicsConstants.MAP_X_OFFSET, _mapCells[mapRow][mapCol].cellY, _mapCells[mapRow][mapCol].cellSize, _mapCells[mapRow][mapCol].cellSize);
+//
+//            }
+//        }
+//
+//        // Paint the robot on-screen.
+//        g.setColor(GraphicsConstants.C_ROBOT);
+//        int r = bot.getRobotPosRow();
+//        int c = bot.getRobotPosCol();
+//        g.fillOval((c - 1) * GraphicsConstants.CELL_SIZE + GraphicsConstants.ROBOT_X_OFFSET + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - (r * GraphicsConstants.CELL_SIZE + GraphicsConstants.ROBOT_Y_OFFSET), GraphicsConstants.ROBOT_W, GraphicsConstants.ROBOT_H);
+//
+//        // Paint the robot's direction indicator on-screen.
+//        g.setColor(GraphicsConstants.C_ROBOT_DIR);
+//        RobotConstants.DIRECTION d = bot.getRobotCurDir();
+//        switch (d) {
+//            case NORTH:
+//                g.fillOval(c * GraphicsConstants.CELL_SIZE + 10 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE - 15, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+//                break;
+//            case EAST:
+//                g.fillOval(c * GraphicsConstants.CELL_SIZE + 35 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 10, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+//                break;
+//            case SOUTH:
+//                g.fillOval(c * GraphicsConstants.CELL_SIZE + 10 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 35, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+//                break;
+//            case WEST:
+//                g.fillOval(c * GraphicsConstants.CELL_SIZE - 15 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 10, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+//                break;
+//        }
+//    }
+
+    private class _DisplayCell {
+        public final int cellX;
+        public final int cellY;
+        public final int cellSize;
+
+        public _DisplayCell(int borderX, int borderY, int borderSize) {
+            this.cellX = borderX + GraphicsConstants.CELL_LINE_WEIGHT;
+            this.cellY = GraphicsConstants.MAP_H - (borderY - GraphicsConstants.CELL_LINE_WEIGHT);
+            this.cellSize = borderSize - (GraphicsConstants.CELL_LINE_WEIGHT * 2);
+        }
+    }
 }
-
-//A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 A18 A19 
-//B0 B1 B2 B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13 B14 B15 B16 B17 B18 B19 
-//C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 C11 C12 C13 C14 C15 C16 C17 C18 C19 
-//D0 D1 D2 D3 D4 D5 D6 D7 D8 D9 D10 D11 D12 D13 D14 D15 D16 D17 D18 D19 
-//E0 E1 E2 E3 E4 E5 E6 E7 E8 E9 E10 E11 E12 E13 E14 E15 E16 E17 E18 E19 
-//F0 F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12 F13 F14 F15 F16 F17 F18 F19 
-//G0 G1 G2 G3 G4 G5 G6 G7 G8 G9 G10 G11 G12 G13 G14 G15 G16 G17 G18 G19 
-//H0 H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 H11 H12 H13 H14 H15 H16 H17 H18 H19 
-//I0 I1 I2 I3 I4 I5 I6 I7 I8 I9 I10 I11 I12 I13 I14 I15 I16 I17 I18 I19 
-//J0 J1 J2 J3 J4 J5 J6 J7 J8 J9 J10 J11 J12 J13 J14 J15 J16 J17 J18 J19 
-//K0 K1 K2 K3 K4 K5 K6 K7 K8 K9 K10 K11 K12 K13 K14 K15 K16 K17 K18 K19 
-//L0 L1 L2 L3 L4 L5 L6 L7 L8 L9 L10 L11 L12 L13 L14 L15 L16 L17 L18 L19 
-//M0 M1 M2 M3 M4 M5 M6 M7 M8 M9 M10 M11 M12 M13 M14 M15 M16 M17 M18 M19 
-//N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 N10 N11 N12 N13 N14 N15 N16 N17 N18 N19 
-//O0 O1 O2 O3 O4 O5 O6 O7 O8 O9 O10 O11 O12 O13 O14 O15 O16 O17 O18 O19 
