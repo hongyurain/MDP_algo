@@ -16,12 +16,16 @@ public class main {
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 		
-
 		// Robot's starting position = "B1"
 		Robot wall_e = new Robot(1, 1); 
-		
+
+		// Prints the map
+		//map.printGrid();
 		System.out.println();
 		
+		// Prints the virtual walls
+		
+		//Simulator.createAndDisplay();
 		displaySim();
 		exploreArea(wall_e, map);
 	}
@@ -48,13 +52,10 @@ public class main {
 				System.out.println("Right is clear");
 				robot.rotateRight();
 			}
-			else {
-				System.out.println("No more paths!");
-				break;
-			}
+			else break;
 			
 			System.out.println("--------------");
-			Thread.sleep(50);
+			Thread.sleep(20);
 			simGrid.repaint();
 		}	
 		System.out.println("All explored!");

@@ -71,7 +71,6 @@ public class Cell {
 	}
 	
 	public void updateTraveled() {
-		if (!this.isObstacle || this.isVirtualWall)
 		this.isTraveled = true;
 		this.button.setBackground(Color.red);
 	}

@@ -3,43 +3,32 @@ package robot;
 import map.Map;
 import map.MapConstant;
 import map.Cell;
-import robot.RobotConstants.DIRECTION;
-import robot.RobotConstants.MOVEMENT;
+import robot.RobotConstant.Direction;
 
-import java.util.concurrent.TimeUnit;
 
 public class Robot {
-	// Center Cell
 	private int row;
-	private int col; 
+	private int col;
 	
-	/**
-	 * Cell information of the robot
-	 * Deciding if we really need this
-	 */
+	// Cell information of the robot
 	private Cell cell;
 	
-	public DIRECTION curDir;
+	public Direction curDir = Direction.RIGHT;
+	
 	
 	private boolean leftClear;
 	private boolean rightClear;
 	private boolean frontClear;
 	
-	private boolean realBot;
-	private boolean reachedGoal;
-	private int speed;
 	
 	
-	public Robot(int row, int col, boolean realBot) {
+	public Robot(int row, int col) {
 		this.row = row;
 		this.col = col;
-		this.cell = new Cell(row, col); // Maybe removing
-		this.curDir = RobotConstants.START_DIR;
-		this.realBot = realBot;
-		this.speed = RobotConstants.SPEED;
-		//Map.grid[this.row][this.col].updateExplored();
-		//Map.grid[this.row][this.col].updateTraveled();
-		//updateSensors();
+		this.cell = new Cell(row, col);
+		Map.grid[this.row][this.col].updateExplored();
+		Map.grid[this.row][this.col].updateTraveled();
+		updateSensors();
 	}
 	
 	public String getCurCellID() {
@@ -50,7 +39,7 @@ public class Robot {
 		return this.cell;
 	}
 	
-	public DIRECTION getCurDir() {
+	public Direction getCurDir() {
 		return this.curDir;
 	}
 	
@@ -89,88 +78,6 @@ public class Robot {
 		updateSensors();
 		this.discoverCellsSim();
 	}
-	
-	/**
-     * Takes in a MOVEMENT and moves the robot accordingly by changing its position and direction. Sends the movement
-     * if this.realBot is set.
-     */
-    public void move(MOVEMENT m, boolean sendMoveToAndroid) {
-        if (!realBot) {
-            // Emulate real movement by pausing execution.
-            try {
-                TimeUnit.MILLISECONDS.sleep(speed);
-            } catch (InterruptedException e) {
-                System.out.println("Something went wrong in Robot.move()!");
-            }
-        }
-
-        switch (m) {
-            case FORWARD:
-                switch (this.curDir) {
-                    case UP:
-                        this.row++;
-                        break;
-                    case RIGHT:
-                        this.col++;
-                        break;
-                    case DOWN:
-                        this.row--;
-                        break;
-                    case LEFT:
-                        this.col--;
-                        break;
-                }
-                break;
-            case BACKWARD:
-                switch (this.curDir) {
-                    case UP:
-                    	row--;
-                        break;
-                    case RIGHT:
-                    	col--;
-                        break;
-                    case DOWN:
-                    	row++;
-                        break;
-                    case LEFT:
-                    	col++;
-                        break;
-                }
-                break;
-            case RIGHT:
-            case LEFT:
-                curDir = findNewDirection(m);
-                break;
-            case CALIBRATE:
-                break;
-            default:
-                System.out.println("Error in Robot.move()!");
-                break;
-        }
-
-        if (realBot) sendMovement(m, false);
-        else System.out.println("Move: " + MOVEMENT.print(m));
-
-        updateTouchedGoal();
-    }
-    
-    private DIRECTION findNewDirection(MOVEMENT m) {
-        if (m == MOVEMENT.RIGHT) {
-            return DIRECTION.getNext(curDir);
-        } else {
-            return DIRECTION.getPrevious(curDir);
-        }
-    }
-    
-    // Need MapConstants file
-    private void updateTouchedGoal() {
-        if (this.row == MapConstant.GOAL_ROW && col == MapConstant.GOAL_COL)
-            this.reachedGoal = true;
-    }
-    
-    public boolean getReachedGoal() {
-        return this.reachedGoal;
-    }
 	
 	/**
 	 *  FOR THE SIMULATION ONLY!!!!
@@ -213,22 +120,25 @@ public class Robot {
 		Map.grid[this.row+1][this.col].updateExplored();	
 		
 		//Map.grid[this.row+1][this.col+1].updateTraveled();
-		Map.grid[this.row+1][this.col+1].updateExplored();			
+		Map.grid[this.row+1][this.col+1].updateExplored();	
+		
+		
+		
 	}
 	
 	public void rotateRight() {
 		switch(this.curDir) {
 		case LEFT:
-			this.curDir = DIRECTION.UP;
+			this.curDir = Direction.UP;
 			break;
 		case UP:
-			this.curDir = DIRECTION.RIGHT;
+			this.curDir = Direction.RIGHT;
 			break;
 		case RIGHT:
-			this.curDir = DIRECTION.DOWN;
+			this.curDir = Direction.DOWN;
 			break;
 		case DOWN:
-			this.curDir = DIRECTION.LEFT;
+			this.curDir = Direction.LEFT;
 			break;
 		}
 		updateSensors();
@@ -237,16 +147,16 @@ public class Robot {
 	public void rotateLeft() {
 		switch(this.curDir) {
 		case LEFT:
-			this.curDir = DIRECTION.DOWN;
+			this.curDir = Direction.DOWN;
 			break;
 		case UP:
-			this.curDir = DIRECTION.LEFT;
+			this.curDir = Direction.LEFT;
 			break;
 		case RIGHT:
-			this.curDir = DIRECTION.UP;
+			this.curDir = Direction.UP;
 			break;
 		case DOWN:
-			this.curDir = DIRECTION.RIGHT;
+			this.curDir = Direction.RIGHT;
 			break;
 		}
 		updateSensors();
