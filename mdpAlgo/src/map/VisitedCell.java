@@ -1,5 +1,5 @@
 package map;
 
 public class VisitedCell {
-	public static int[][] visitedArr = new int[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
+	public static int[][] visitedArr = new int[MapConstant.MAP_ROWS][MapConstant.MAP_COLS];
 }
