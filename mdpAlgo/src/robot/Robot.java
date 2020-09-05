@@ -26,11 +26,26 @@ public class Robot {
     
     private int speed;
     
+    
+	/**
+	 * 
+	 *  Below diagram shows how the sensors are named
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  			  (s3_1) (s2_1) (s1_1)
+	 *  			  (s3_0) (s2_0) (s1_0)
+	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) (s5_0) (s5_1)
+	 *                (ROBO) (ROBO) (ROBO) (s6_0) (s6_1) (s6_2) (s6_3) (s6_4)
+	 *                (ROBO) (ROBO) (ROBO)
+	 *  
+	 */
     private final Sensor SRFrontLeft;       // north-facing front-left SR
     private final Sensor SRFrontCenter;     // north-facing front-center SR
     private final Sensor SRFrontRight;      // north-facing front-right SR
-    private final Sensor SRLeftFront;            // west-facing left SR
-    private final Sensor SRLeftBack;           // east-facing right SR
+    private final Sensor SRLeft;            // west-facing left SR
+    private final Sensor SRRight;           // east-facing right SR
     private final Sensor LRRight;            // west-facing left LR
     private boolean reachedGoal;
     private final boolean realBot;
@@ -50,8 +65,8 @@ public class Robot {
         SRFrontLeft = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, this.robotDir, "SRFL");
         SRFrontCenter = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col, this.robotDir, "SRFC");
         SRFrontRight = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col + 1, this.robotDir, "SRFR");
-        SRLeftFront = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRLF");
-        SRLeftBack = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNR), "SRLB");
+        SRLeft = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRLF");
+        SRRight = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNR), "SRLB");
         LRRight = new Sensor(RobotConstants.SENSOR_LONG_RANGE_L, RobotConstants.SENSOR_LONG_RANGE_H, this.row, this.col - 1, findNewDirection(MOVEMENT.TURNL), "LRR");
     }
 	
@@ -212,33 +227,33 @@ public class Robot {
                 SRFrontLeft.setSensor(this.row + 1, this.col - 1, this.robotDir);
                 SRFrontCenter.setSensor(this.row + 1, this.col, this.robotDir);
                 SRFrontRight.setSensor(this.row + 1, this.col + 1, this.robotDir);
-                SRLeftFront.setSensor(this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
-                SRLeftBack.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNR));
+                SRLeft.setSensor(this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
+                SRRight.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
+                LRRight.setSensor(this.row, this.col + 1, findNewDirection(MOVEMENT.TURNR));
                 break;
             case RIGHT:
                 SRFrontLeft.setSensor(this.row + 1, this.col + 1, this.robotDir);
                 SRFrontCenter.setSensor(this.row, this.col + 1, this.robotDir);
                 SRFrontRight.setSensor(this.row - 1, this.col + 1, this.robotDir);
-                SRLeftFront.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
-                SRLeftBack.setSensor(this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row - 1, this.col + 1, findNewDirection(MOVEMENT.TURNR));
+                SRLeft.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
+                SRRight.setSensor(this.row -1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
+                LRRight.setSensor(this.row - 1, this.col, findNewDirection(MOVEMENT.TURNR));
                 break;
             case DOWN:
                 SRFrontLeft.setSensor(this.row - 1, this.col + 1, this.robotDir);
                 SRFrontCenter.setSensor(this.row - 1, this.col, this.robotDir);
                 SRFrontRight.setSensor(this.row - 1, this.col - 1, this.robotDir);
-                SRLeftFront.setSensor(this.row - 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
-                SRLeftBack.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNR));
+                SRLeft.setSensor(this.row - 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
+                SRRight.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
+                LRRight.setSensor(this.row, this.col - 1, findNewDirection(MOVEMENT.TURNR));
                 break;
             case LEFT:
                 SRFrontLeft.setSensor(this.row - 1, this.col - 1, this.robotDir);
                 SRFrontCenter.setSensor(this.row, this.col - 1, this.robotDir);
                 SRFrontRight.setSensor(this.row + 1, this.col - 1, this.robotDir);
-                SRLeftFront.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
-                SRLeftBack.setSensor(this.row - 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNR));
+                SRLeft.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
+                SRRight.setSensor(this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
+                LRRight.setSensor(this.row + 1, this.col, findNewDirection(MOVEMENT.TURNR));
                 break;
         }
 
@@ -265,8 +280,8 @@ public class Robot {
             result[0] = SRFrontLeft.sense(explorationMap, realMap);
             result[1] = SRFrontCenter.sense(explorationMap, realMap);
             result[2] = SRFrontRight.sense(explorationMap, realMap);
-            result[3] = SRLeftFront.sense(explorationMap, realMap);
-            result[4] = SRLeftBack.sense(explorationMap, realMap);
+            result[3] = SRLeft.sense(explorationMap, realMap);
+            result[4] = SRRight.sense(explorationMap, realMap);
             result[5] = LRRight.sense(explorationMap, realMap);
         } else {
             CommMgr comm = CommMgr.getCommMgr();
@@ -282,8 +297,8 @@ public class Robot {
             SRFrontLeft.senseReal(explorationMap, result[1]);
             SRFrontCenter.senseReal(explorationMap, result[2]);
             SRFrontRight.senseReal(explorationMap, result[3]);
-            SRLeftFront.senseReal(explorationMap, result[4]);
-            SRLeftBack.senseReal(explorationMap, result[5]);
+            SRLeft.senseReal(explorationMap, result[4]);
+            SRRight.senseReal(explorationMap, result[5]);
             LRRight.senseReal(explorationMap, result[0]);
 
             String[] mapStrings = MapDescriptor.generateMapDescriptor(explorationMap);
@@ -297,20 +312,7 @@ public class Robot {
         return this.reachedGoal;
     }
 	
-	/**
-	 *  FOR THE SIMULATION ONLY!!!!
-	 *  Below diagram shows how the sensors are named
-	 *  
-	 *  
-	 *  
-	 *  
-	 *  			  (s3_1) (s2_1) (s1_1)
-	 *  			  (s3_0) (s2_0) (s1_0)
-	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) (s6_0) (s6_1) (s6_2) (s6_3) (s6_4)
-	 *                (ROBO) (ROBO) (ROBO)
-	 *  (s5_1) (s5_0) (ROBO) (ROBO) (ROBO)
-	 *  
-	 */
+
 	
 //    private void discoverCellsSim() {
 //		// Updates cell traveled and explored		
