@@ -1,6 +1,6 @@
 package map;
 
-public class MapConstant {
+public class MapConstants {
 	public static final int MAP_SIZE = 300;     // total num of cells
     public static final int MAP_ROWS = 20;      // total num of rows
     public static final int MAP_COLS = 15;      // total num of cols
