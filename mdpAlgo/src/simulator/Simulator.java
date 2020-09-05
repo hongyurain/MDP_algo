@@ -193,7 +193,7 @@ public class Simulator {
                 String fp1 = fastestPathToWayPoint.runFastestPath(fpRow,fpCol);
                 bot.setRobotPos(fpRow,fpCol);
 
-                System.out.println("B4 goal: "+bot.getRobotPosRow()+ ", "+bot.getRobotPosCol());
+                System.out.println("B4 goal: "+bot.getRow()+ ", "+bot.getCol());
                 FastestPathAlgo fastestPathToGoal;
                 fastestPathToGoal = new FastestPathAlgo(exploredMap, bot);
                 String fp2 = fastestPathToGoal.runFastestPath(RobotConstants.GOAL_ROW, RobotConstants.GOAL_COL);

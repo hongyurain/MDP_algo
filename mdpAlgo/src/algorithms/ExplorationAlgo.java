@@ -48,19 +48,19 @@ public class ExplorationAlgo {
 
             //CommMgr.getCommMgr().recvMsg();
             if (bot.getRealBot()) {
-                bot.move(MOVEMENT.LEFT, false);
+                bot.move(MOVEMENT.TURNL, false);
                 CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.CALIBRATE, false);
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.LEFT, false);
+                bot.move(MOVEMENT.TURNL, false);
                 CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.CALIBRATE, false);
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.RIGHT, false);
+                bot.move(MOVEMENT.TURNR, false);
                 CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.CALIBRATE, false);
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.RIGHT, false);
+                bot.move(MOVEMENT.TURNR, false);
             }
 
             while (true) {
@@ -88,11 +88,11 @@ public class ExplorationAlgo {
         areaExplored = calculateAreaExplored();
         System.out.println("Explored Area: " + areaExplored);
 
-        explorationLoop(bot.getRobotPosRow(), bot.getRobotPosCol());
+        explorationLoop(bot.getRow(), bot.getCol());
 
         exploredMap.repaint();
         String[] mapStrings = MapDescriptor.generateMapDescriptor(exploredMap);
-        CommMgr.getCommMgr().sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + bot.getRobotPosRow() + " " + bot.getRobotPosCol() + " " + DIRECTION.print(bot.getRobotCurDir()), CommMgr.MAP_STRINGS);
+        CommMgr.getCommMgr().sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + bot.getRow() + " " + bot.getCol() + " " + DIRECTION.print(bot.getCurDir()), CommMgr.MAP_STRINGS);
         CommMgr.getCommMgr().sendMsg("END", CommMgr.BOT_POS);
     }
 
@@ -118,12 +118,12 @@ public class ExplorationAlgo {
      */
     private void explorationLoop(int r, int c) {
         do {
-            updateVisited(bot.getRobotPosRow(), bot.getRobotPosCol());
+            updateVisited(bot.getRow(), bot.getCol());
             nextMove();
             areaExplored = calculateAreaExplored();
             System.out.println("Area explored: " + areaExplored);
 
-            if (bot.getRobotPosRow() == r && bot.getRobotPosCol() == c) {
+            if (bot.getRow() == r && bot.getCol() == c) {
                 if (areaExplored >= 100) {
                     break;
                 }
@@ -149,16 +149,16 @@ public class ExplorationAlgo {
      */
     private void nextMove() {
         if (lookRight()) {
-            moveBot(MOVEMENT.RIGHT);
+            moveBot(MOVEMENT.TURNR);
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else if (lookForward()) {
             moveBot(MOVEMENT.FORWARD);
         } else if (lookLeft()) {
-            moveBot(MOVEMENT.LEFT);
+            moveBot(MOVEMENT.TURNL);
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else {
-            moveBot(MOVEMENT.RIGHT);
-            moveBot(MOVEMENT.RIGHT);
+            moveBot(MOVEMENT.TURNR);
+            moveBot(MOVEMENT.TURNR);
         }
     }
 
@@ -166,15 +166,15 @@ public class ExplorationAlgo {
      * Returns true if the right side of the robot is free to move into.
      */
     private boolean lookRight() {
-        switch (bot.getRobotCurDir()) {
-            case NORTH:
-                return eastFree();
-            case EAST:
-                return southFree();
-            case SOUTH:
-                return westFree();
-            case WEST:
-                return northFree();
+        switch (bot.getCurDir()) {
+            case UP:
+                return RIGHTFree();
+            case RIGHT:
+                return DOWNFree();
+            case DOWN:
+                return LEFTFree();
+            case LEFT:
+                return UPFree();
         }
         return false;
     }
@@ -183,15 +183,15 @@ public class ExplorationAlgo {
      * Returns true if the robot is free to move forward.
      */
     private boolean lookForward() {
-        switch (bot.getRobotCurDir()) {
-            case NORTH:
-                return northFree();
-            case EAST:
-                return eastFree();
-            case SOUTH:
-                return southFree();
-            case WEST:
-                return westFree();
+        switch (bot.getCurDir()) {
+            case UP:
+                return UPFree();
+            case RIGHT:
+                return RIGHTFree();
+            case DOWN:
+                return DOWNFree();
+            case LEFT:
+                return LEFTFree();
         }
         return false;
     }
@@ -200,60 +200,60 @@ public class ExplorationAlgo {
      * * Returns true if the left side of the robot is free to move into.
      */
     private boolean lookLeft() {
-        switch (bot.getRobotCurDir()) {
-            case NORTH:
-                return westFree();
-            case EAST:
-                return northFree();
-            case SOUTH:
-                return eastFree();
-            case WEST:
-                return southFree();
+        switch (bot.getCurDir()) {
+            case UP:
+                return LEFTFree();
+            case RIGHT:
+                return UPFree();
+            case DOWN:
+                return RIGHTFree();
+            case LEFT:
+                return DOWNFree();
         }
         return false;
     }
 
     /**
-     * Returns true if the robot can move to the north cell.
+     * Returns true if the robot can move to the UP cell.
      */
-    private boolean northFree() {
-        int botRow = bot.getRobotPosRow();
-        int botCol = bot.getRobotPosCol();
+    private boolean UPFree() {
+        int botRow = bot.getRow();
+        int botCol = bot.getCol();
         return (isExploredNotObstacle(botRow + 1, botCol - 1) && isExploredAndFree(botRow + 1, botCol) && isExploredNotObstacle(botRow + 1, botCol + 1));
     }
 
     /**
-     * Returns true if the robot can move to the east cell.
+     * Returns true if the robot can move to the RIGHT cell.
      */
-    private boolean eastFree() {
-        int botRow = bot.getRobotPosRow();
-        int botCol = bot.getRobotPosCol();
+    private boolean RIGHTFree() {
+        int botRow = bot.getRow();
+        int botCol = bot.getCol();
         return (isExploredNotObstacle(botRow - 1, botCol + 1) && isExploredAndFree(botRow, botCol + 1) && isExploredNotObstacle(botRow + 1, botCol + 1));
     }
 
     /**
-     * Returns true if the robot can move to the south cell.
+     * Returns true if the robot can move to the DOWN cell.
      */
-    private boolean southFree() {
-        int botRow = bot.getRobotPosRow();
-        int botCol = bot.getRobotPosCol();
+    private boolean DOWNFree() {
+        int botRow = bot.getRow();
+        int botCol = bot.getCol();
         return (isExploredNotObstacle(botRow - 1, botCol - 1) && isExploredAndFree(botRow - 1, botCol) && isExploredNotObstacle(botRow - 1, botCol + 1));
     }
 
     /**
-     * Returns true if the robot can move to the west cell.
+     * Returns true if the robot can move to the LEFT cell.
      */
-    private boolean westFree() {
-        int botRow = bot.getRobotPosRow();
-        int botCol = bot.getRobotPosCol();
+    private boolean LEFTFree() {
+        int botRow = bot.getRow();
+        int botCol = bot.getCol();
         return (isExploredNotObstacle(botRow - 1, botCol - 1) && isExploredAndFree(botRow, botCol - 1) && isExploredNotObstacle(botRow + 1, botCol - 1));
     }
 
     /**
-     * Returns the robot to START after exploration and points the bot northwards.
+     * Returns the robot to START after exploration and points the bot UPwards.
      */
     private void goHome() {
-        if (!bot.getTouchedGoal() && coverageLimit == 300 && timeLimit == 3600) {
+        if (!bot.getReachedGoal() && coverageLimit == 300 && timeLimit == 3600) {
             FastestPathAlgo goToGoal = new FastestPathAlgo(exploredMap, bot, realMap);
             goToGoal.runFastestPath(RobotConstants.GOAL_ROW, RobotConstants.GOAL_COL);
         }
@@ -268,17 +268,17 @@ public class ExplorationAlgo {
         System.out.println((System.currentTimeMillis() - startTime) / 1000 + " Seconds");
 
         if (bot.getRealBot()) {
-            turnBotDirection(DIRECTION.WEST);
+            turnBotDirection(DIRECTION.LEFT);
             moveBot(MOVEMENT.CALIBRATE);
             moveBot(MOVEMENT.CALIBRATE);
-            turnBotDirection(DIRECTION.SOUTH);
+            turnBotDirection(DIRECTION.DOWN);
             moveBot(MOVEMENT.CALIBRATE);
             moveBot(MOVEMENT.CALIBRATE);
-            turnBotDirection(DIRECTION.WEST);
+            turnBotDirection(DIRECTION.LEFT);
             moveBot(MOVEMENT.CALIBRATE);
             moveBot(MOVEMENT.CALIBRATE);
         }
-        turnBotDirection(DIRECTION.NORTH);
+        turnBotDirection(DIRECTION.UP);
     }
 
     /**
@@ -334,7 +334,7 @@ public class ExplorationAlgo {
         if (bot.getRealBot() && !calibrationMode) {
             calibrationMode = true;
 
-            if (canCalibrateOnTheSpot(bot.getRobotCurDir())) {
+            if (canCalibrateOnTheSpot(bot.getCurDir())) {
                 lastCalibrate = 0;
                 moveBot(MOVEMENT.CALIBRATE);
             } else {
@@ -365,17 +365,17 @@ public class ExplorationAlgo {
      * Checks if the robot can calibrate at its current position given a direction.
      */
     private boolean canCalibrateOnTheSpot(DIRECTION botDir) {
-        int row = bot.getRobotPosRow();
-        int col = bot.getRobotPosCol();
+        int row = bot.getRow();
+        int col = bot.getCol();
 
         switch (botDir) {
-            case NORTH:
+            case UP:
                 return exploredMap.getIsObstacleOrWall(row + 2, col - 1) && exploredMap.getIsObstacleOrWall(row + 2, col) && exploredMap.getIsObstacleOrWall(row + 2, col + 1);
-            case EAST:
+            case RIGHT:
                 return exploredMap.getIsObstacleOrWall(row + 1, col + 2) && exploredMap.getIsObstacleOrWall(row, col + 2) && exploredMap.getIsObstacleOrWall(row - 1, col + 2);
-            case SOUTH:
+            case DOWN:
                 return exploredMap.getIsObstacleOrWall(row - 2, col - 1) && exploredMap.getIsObstacleOrWall(row - 2, col) && exploredMap.getIsObstacleOrWall(row - 2, col + 1);
-            case WEST:
+            case LEFT:
                 return exploredMap.getIsObstacleOrWall(row + 1, col - 2) && exploredMap.getIsObstacleOrWall(row, col - 2) && exploredMap.getIsObstacleOrWall(row - 1, col - 2);
         }
 
@@ -386,7 +386,7 @@ public class ExplorationAlgo {
      * Returns a possible direction for robot calibration or null, otherwise.
      */
     private DIRECTION getCalibrationDirection() {
-        DIRECTION origDir = bot.getRobotCurDir();
+        DIRECTION origDir = bot.getCurDir();
         DIRECTION dirToCheck;
 
         dirToCheck = DIRECTION.getNext(origDir);                    // right turn
@@ -406,7 +406,7 @@ public class ExplorationAlgo {
      * to its original direction.
      */
     private void calibrateBot(DIRECTION targetDir) {
-        DIRECTION origDir = bot.getRobotCurDir();
+        DIRECTION origDir = bot.getCurDir();
 
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
@@ -417,18 +417,18 @@ public class ExplorationAlgo {
      * Turns the robot to the required direction.
      */
     private void turnBotDirection(DIRECTION targetDir) {
-        int numOfTurn = Math.abs(bot.getRobotCurDir().ordinal() - targetDir.ordinal());
+        int numOfTurn = Math.abs(bot.getCurDir().ordinal() - targetDir.ordinal());
         if (numOfTurn > 2) numOfTurn = numOfTurn % 2;
 
         if (numOfTurn == 1) {
-            if (DIRECTION.getNext(bot.getRobotCurDir()) == targetDir) {
-                moveBot(MOVEMENT.RIGHT);
+            if (DIRECTION.getNext(bot.getCurDir()) == targetDir) {
+                moveBot(MOVEMENT.TURNR);
             } else {
-                moveBot(MOVEMENT.LEFT);
+                moveBot(MOVEMENT.TURNL);
             }
         } else if (numOfTurn == 2) {
-            moveBot(MOVEMENT.RIGHT);
-            moveBot(MOVEMENT.RIGHT);
+            moveBot(MOVEMENT.TURNR);
+            moveBot(MOVEMENT.TURNR);
         }
     }
 }

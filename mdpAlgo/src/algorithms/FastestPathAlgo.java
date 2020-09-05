@@ -59,8 +59,8 @@ public class FastestPathAlgo {
         this.visited = new ArrayList<>();
         this.parents = new HashMap<>();
         this.neighbors = new Cell[4];
-        this.current = map.getCell(bot.getRobotPosRow(), bot.getRobotPosCol());
-        this.curDir = bot.getRobotCurDir();
+        this.current = map.getCell(bot.getRow(), bot.getCol());
+        this.curDir = bot.getCurDir();
         this.gCosts = new double[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
         System.out.println("current map: "+current.getRow()+", "+current.getCol());
         // Initialise gCosts array
@@ -77,7 +77,7 @@ public class FastestPathAlgo {
         toVisit.add(current);
 
         // Initialise starting point
-        gCosts[bot.getRobotPosRow()][bot.getRobotPosCol()] = 0;
+        gCosts[bot.getRow()][bot.getCol()] = 0;
         this.loopCount = 0;
     }
 
@@ -131,14 +131,14 @@ public class FastestPathAlgo {
      */
     private DIRECTION getTargetDir(int botR, int botC, DIRECTION botDir, Cell target) {
         if (botC - target.getCol() > 0) {
-            return DIRECTION.WEST;
+            return DIRECTION.LEFT;
         } else if (target.getCol() - botC > 0) {
-            return DIRECTION.EAST;
+            return DIRECTION.RIGHT;
         } else {
             if (botR - target.getRow() > 0) {
-                return DIRECTION.SOUTH;
+                return DIRECTION.DOWN;
             } else if (target.getRow() - botR > 0) {
-                return DIRECTION.NORTH;
+                return DIRECTION.UP;
             } else {
                 return botDir;
             }
@@ -280,25 +280,25 @@ public class FastestPathAlgo {
 
         ArrayList<MOVEMENT> movements = new ArrayList<>();
 
-        Robot tempBot = new Robot(bot.getRobotPosRow(), bot.getRobotPosCol(), false);
-        tempBot.setRobotDir(bot.getRobotCurDir());
+        Robot tempBot = new Robot(bot.getRow(), bot.getCol(), false);
+        tempBot.setRobotDir(bot.getCurDir());
         tempBot.setSpeed(0);
         
-        while ((tempBot.getRobotPosRow() != goalRow) || (tempBot.getRobotPosCol() != goalCol)) {
-            if (tempBot.getRobotPosRow() == temp.getRow() && tempBot.getRobotPosCol() == temp.getCol()) {
+        while ((tempBot.getRow() != goalRow) || (tempBot.getCol() != goalCol)) {
+            if (tempBot.getRow() == temp.getRow() && tempBot.getCol() == temp.getCol()) {
                 temp = path.pop();
             }
 
-            targetDir = getTargetDir(tempBot.getRobotPosRow(), tempBot.getRobotPosCol(), tempBot.getRobotCurDir(), temp);
+            targetDir = getTargetDir(tempBot.getRow(), tempBot.getCol(), tempBot.getCurDir(), temp);
 
             MOVEMENT m;
-            if (tempBot.getRobotCurDir() != targetDir) {
-                m = getTargetMove(tempBot.getRobotCurDir(), targetDir);
+            if (tempBot.getCurDir() != targetDir) {
+                m = getTargetMove(tempBot.getCurDir(), targetDir);
             } else {
                 m = MOVEMENT.FORWARD;
             }
 
-            System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRobotPosRow() + ", " + tempBot.getRobotPosCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
+            System.out.println("Movement " + MOVEMENT.print(m) + " from (" + tempBot.getRow() + ", " + tempBot.getCol() + ") to (" + temp.getRow() + ", " + temp.getCol() + ")");
 
             tempBot.move(m);
             movements.add(m);
@@ -335,16 +335,16 @@ public class FastestPathAlgo {
                     //     exploredMap.repaint();
                     // }
                     
-                } else if (x == MOVEMENT.RIGHT || x == MOVEMENT.LEFT) {
+                } else if (x == MOVEMENT.TURNR || x == MOVEMENT.TURNL) {
                     if (fCount > 0) {
                         fpInstructions.append(((char)(fCount+64)));
                         // bot.moveForwardMultiple(fCount);
                         fCount = 0;
                         // exploredMap.repaint();
-                    if (x == MOVEMENT.RIGHT){
-                        bot.setRobotDir(DIRECTION.getNext(bot.getRobotCurDir()));
+                    if (x == MOVEMENT.TURNR){
+                        bot.setRobotDir(DIRECTION.getNext(bot.getCurDir()));
                     } else {
-                        bot.setRobotDir(DIRECTION.getPrevious(bot.getRobotCurDir()));
+                        bot.setRobotDir(DIRECTION.getPrevious(bot.getCurDir()));
                         }
                     }
                     fpInstructions.append(MOVEMENT.print(x));
@@ -370,26 +370,26 @@ public class FastestPathAlgo {
      * Returns true if the robot can move forward one cell with the current heading.
      */
     private boolean canMoveForward() {
-        int row = bot.getRobotPosRow();
-        int col = bot.getRobotPosCol();
+        int row = bot.getRow();
+        int col = bot.getCol();
 
-        switch (bot.getRobotCurDir()) {
-            case NORTH:
+        switch (bot.getCurDir()) {
+            case UP:
                 if (!exploredMap.isObstacleCell(row + 2, col - 1) && !exploredMap.isObstacleCell(row + 2, col) && !exploredMap.isObstacleCell(row + 2, col + 1)) {
                     return true;
                 }
                 break;
-            case EAST:
+            case RIGHT:
                 if (!exploredMap.isObstacleCell(row + 1, col + 2) && !exploredMap.isObstacleCell(row, col + 2) && !exploredMap.isObstacleCell(row - 1, col + 2)) {
                     return true;
                 }
                 break;
-            case SOUTH:
+            case DOWN:
                 if (!exploredMap.isObstacleCell(row - 2, col - 1) && !exploredMap.isObstacleCell(row - 2, col) && !exploredMap.isObstacleCell(row - 2, col + 1)) {
                     return true;
                 }
                 break;
-            case WEST:
+            case LEFT:
                 if (!exploredMap.isObstacleCell(row + 1, col - 2) && !exploredMap.isObstacleCell(row, col - 2) && !exploredMap.isObstacleCell(row - 1, col - 2)) {
                     return true;
                 }
@@ -404,51 +404,51 @@ public class FastestPathAlgo {
      */
     private MOVEMENT getTargetMove(DIRECTION a, DIRECTION b) {
         switch (a) {
-            case NORTH:
+            case UP:
                 switch (b) {
-                    case NORTH:
+                    case UP:
                         return MOVEMENT.ERROR;
-                    case SOUTH:
-                        return MOVEMENT.LEFT;
-                    case WEST:
-                        return MOVEMENT.LEFT;
-                    case EAST:
-                        return MOVEMENT.RIGHT;
+                    case DOWN:
+                        return MOVEMENT.TURNL;
+                    case LEFT:
+                        return MOVEMENT.TURNL;
+                    case RIGHT:
+                        return MOVEMENT.TURNR;
                 }
                 break;
-            case SOUTH:
+            case DOWN:
                 switch (b) {
-                    case NORTH:
-                        return MOVEMENT.LEFT;
-                    case SOUTH:
+                    case UP:
+                        return MOVEMENT.TURNL;
+                    case DOWN:
                         return MOVEMENT.ERROR;
-                    case WEST:
-                        return MOVEMENT.RIGHT;
-                    case EAST:
-                        return MOVEMENT.LEFT;
+                    case LEFT:
+                        return MOVEMENT.TURNR;
+                    case RIGHT:
+                        return MOVEMENT.TURNL;
                 }
                 break;
-            case WEST:
+            case LEFT:
                 switch (b) {
-                    case NORTH:
-                        return MOVEMENT.RIGHT;
-                    case SOUTH:
-                        return MOVEMENT.LEFT;
-                    case WEST:
+                    case UP:
+                        return MOVEMENT.TURNR;
+                    case DOWN:
+                        return MOVEMENT.TURNL;
+                    case LEFT:
                         return MOVEMENT.ERROR;
-                    case EAST:
-                        return MOVEMENT.LEFT;
+                    case RIGHT:
+                        return MOVEMENT.TURNL;
                 }
                 break;
-            case EAST:
+            case RIGHT:
                 switch (b) {
-                    case NORTH:
-                        return MOVEMENT.LEFT;
-                    case SOUTH:
-                        return MOVEMENT.RIGHT;
-                    case WEST:
-                        return MOVEMENT.LEFT;
-                    case EAST:
+                    case UP:
+                        return MOVEMENT.TURNL;
+                    case DOWN:
+                        return MOVEMENT.TURNR;
+                    case LEFT:
+                        return MOVEMENT.TURNL;
+                    case RIGHT:
                         return MOVEMENT.ERROR;
                 }
         }
