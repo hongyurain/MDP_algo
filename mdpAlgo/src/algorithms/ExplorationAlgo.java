@@ -148,13 +148,13 @@ public class ExplorationAlgo {
      * Determines the next move for the robot and executes it accordingly.
      */
     private void nextMove() {
-        if (lookRight()) {
-            moveBot(MOVEMENT.TURNR);
+        if (lookLeft()) {
+            moveBot(MOVEMENT.TURNL);
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else if (lookForward()) {
             moveBot(MOVEMENT.FORWARD);
-        } else if (lookLeft()) {
-            moveBot(MOVEMENT.TURNL);
+        } else if (lookRight()) {
+            moveBot(MOVEMENT.TURNR);
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else {
             moveBot(MOVEMENT.TURNR);
@@ -389,10 +389,10 @@ public class ExplorationAlgo {
         DIRECTION origDir = bot.getCurDir();
         DIRECTION dirToCheck;
 
-        dirToCheck = DIRECTION.getNext(origDir);                    // right turn
+        dirToCheck = DIRECTION.getNext(origDir);                    // left turn
         if (canCalibrateOnTheSpot(dirToCheck)) return dirToCheck;
 
-        dirToCheck = DIRECTION.getPrevious(origDir);                // left turn
+        dirToCheck = DIRECTION.getPrevious(origDir);                // right turn
         if (canCalibrateOnTheSpot(dirToCheck)) return dirToCheck;
 
         dirToCheck = DIRECTION.getPrevious(dirToCheck);             // u turn
@@ -422,9 +422,9 @@ public class ExplorationAlgo {
 
         if (numOfTurn == 1) {
             if (DIRECTION.getNext(bot.getCurDir()) == targetDir) {
-                moveBot(MOVEMENT.TURNR);
-            } else {
                 moveBot(MOVEMENT.TURNL);
+            } else {
+                moveBot(MOVEMENT.TURNR);
             }
         } else if (numOfTurn == 2) {
             moveBot(MOVEMENT.TURNR);
