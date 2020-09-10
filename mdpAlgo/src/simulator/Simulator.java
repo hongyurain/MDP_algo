@@ -41,7 +41,7 @@ public class Simulator {
     private static final CommMgr comm = CommMgr.getCommMgr();
     private static int fpRow;
     private static int fpCol;
-    private static final boolean realRun = true;
+    private static final boolean realRun = false;
 
     /**
      * Initialises the different maps and displays the application.
@@ -81,7 +81,7 @@ public class Simulator {
     private static void displayEverything() {
         // Initialise main frame for display
         _appFrame = new JFrame();
-        _appFrame.setTitle("MDP Group 2 Simulator");
+        _appFrame.setTitle("MDP Simulator");
         _appFrame.setSize(new Dimension(690, 700));
         _appFrame.setResizable(false);
 
@@ -170,6 +170,7 @@ public class Simulator {
                             CardLayout cl = ((CardLayout) _mapCards.getLayout());
                             cl.show(_mapCards, "REAL_MAP");
                             realMap.repaint();
+                            System.out.println("Map printed!");
                         }
                     });
 

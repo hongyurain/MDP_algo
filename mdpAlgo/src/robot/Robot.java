@@ -59,7 +59,7 @@ public class Robot {
         this.col = col;
         robotDir = RobotConstants.START_DIR;
         speed = RobotConstants.SPEED;
-
+        
         this.realBot = realBot;
         
         SRFrontLeft = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, this.robotDir, "SRFL");
@@ -261,9 +261,9 @@ public class Robot {
     
     private DIRECTION findNewDirection(MOVEMENT m) {
         if (m == MOVEMENT.TURNR) {
-            return DIRECTION.getNext(curDir);
+            return DIRECTION.getNext(robotDir);
         } else {
-            return DIRECTION.getPrevious(curDir);
+            return DIRECTION.getPrevious(robotDir);
         }
     }
     
