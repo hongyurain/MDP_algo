@@ -92,7 +92,7 @@ public class ExplorationAlgo {
 
         exploredMap.repaint();
         String[] mapStrings = MapDescriptor.generateMapDescriptor(exploredMap);
-        CommMgr.getCommMgr().sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + bot.getRow() + " " + bot.getCol() + " " + DIRECTION.print(bot.getCurDir()), CommMgr.MAP_STRINGS);
+        CommMgr.getCommMgr().sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + bot.getRow() + " " + bot.getCol() + " " + DIRECTION.print(bot.getrobotDir()), CommMgr.MAP_STRINGS);
         CommMgr.getCommMgr().sendMsg("END", CommMgr.BOT_POS);
     }
 
@@ -166,7 +166,7 @@ public class ExplorationAlgo {
      * Returns true if the right side of the robot is free to move into.
      */
     private boolean lookRight() {
-        switch (bot.getCurDir()) {
+        switch (bot.getrobotDir()) {
             case UP:
                 return RIGHTFree();
             case RIGHT:
@@ -183,7 +183,7 @@ public class ExplorationAlgo {
      * Returns true if the robot is free to move forward.
      */
     private boolean lookForward() {
-        switch (bot.getCurDir()) {
+        switch (bot.getrobotDir()) {
             case UP:
                 return UPFree();
             case RIGHT:
@@ -200,7 +200,7 @@ public class ExplorationAlgo {
      * * Returns true if the left side of the robot is free to move into.
      */
     private boolean lookLeft() {
-        switch (bot.getCurDir()) {
+        switch (bot.getrobotDir()) {
             case UP:
                 return LEFTFree();
             case RIGHT:
@@ -334,7 +334,7 @@ public class ExplorationAlgo {
         if (bot.getRealBot() && !calibrationMode) {
             calibrationMode = true;
 
-            if (canCalibrateOnTheSpot(bot.getCurDir())) {
+            if (canCalibrateOnTheSpot(bot.getrobotDir())) {
                 lastCalibrate = 0;
                 moveBot(MOVEMENT.CALIBRATE);
             } else {
@@ -386,7 +386,7 @@ public class ExplorationAlgo {
      * Returns a possible direction for robot calibration or null, otherwise.
      */
     private DIRECTION getCalibrationDirection() {
-        DIRECTION origDir = bot.getCurDir();
+        DIRECTION origDir = bot.getrobotDir();
         DIRECTION dirToCheck;
 
         dirToCheck = DIRECTION.getNext(origDir);                    // left turn
@@ -406,7 +406,7 @@ public class ExplorationAlgo {
      * to its original direction.
      */
     private void calibrateBot(DIRECTION targetDir) {
-        DIRECTION origDir = bot.getCurDir();
+        DIRECTION origDir = bot.getrobotDir();
 
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
@@ -417,11 +417,11 @@ public class ExplorationAlgo {
      * Turns the robot to the required direction.
      */
     private void turnBotDirection(DIRECTION targetDir) {
-        int numOfTurn = Math.abs(bot.getCurDir().ordinal() - targetDir.ordinal());
+        int numOfTurn = Math.abs(bot.getrobotDir().ordinal() - targetDir.ordinal());
         if (numOfTurn > 2) numOfTurn = numOfTurn % 2;
 
         if (numOfTurn == 1) {
-            if (DIRECTION.getNext(bot.getCurDir()) == targetDir) {
+            if (DIRECTION.getNext(bot.getrobotDir()) == targetDir) {
                 moveBot(MOVEMENT.TURNL);
             } else {
                 moveBot(MOVEMENT.TURNR);

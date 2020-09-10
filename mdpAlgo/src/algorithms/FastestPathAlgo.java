@@ -60,7 +60,7 @@ public class FastestPathAlgo {
         this.parents = new HashMap<>();
         this.neighbors = new Cell[4];
         this.current = map.getCell(bot.getRow(), bot.getCol());
-        this.curDir = bot.getCurDir();
+        this.curDir = bot.getrobotDir();
         this.gCosts = new double[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
         System.out.println("current map: "+current.getRow()+", "+current.getCol());
         // Initialise gCosts array
@@ -281,7 +281,7 @@ public class FastestPathAlgo {
         ArrayList<MOVEMENT> movements = new ArrayList<>();
 
         Robot tempBot = new Robot(bot.getRow(), bot.getCol(), false);
-        tempBot.setRobotDir(bot.getCurDir());
+        tempBot.setRobotDir(bot.getrobotDir());
         tempBot.setSpeed(0);
         
         while ((tempBot.getRow() != goalRow) || (tempBot.getCol() != goalCol)) {
@@ -289,11 +289,11 @@ public class FastestPathAlgo {
                 temp = path.pop();
             }
 
-            targetDir = getTargetDir(tempBot.getRow(), tempBot.getCol(), tempBot.getCurDir(), temp);
+            targetDir = getTargetDir(tempBot.getRow(), tempBot.getCol(), tempBot.getrobotDir(), temp);
 
             MOVEMENT m;
-            if (tempBot.getCurDir() != targetDir) {
-                m = getTargetMove(tempBot.getCurDir(), targetDir);
+            if (tempBot.getrobotDir() != targetDir) {
+                m = getTargetMove(tempBot.getrobotDir(), targetDir);
             } else {
                 m = MOVEMENT.FORWARD;
             }
@@ -342,9 +342,9 @@ public class FastestPathAlgo {
                         fCount = 0;
                         // exploredMap.repaint();
                     if (x == MOVEMENT.TURNR){
-                        bot.setRobotDir(DIRECTION.getNext(bot.getCurDir()));
+                        bot.setRobotDir(DIRECTION.getNext(bot.getrobotDir()));
                     } else {
-                        bot.setRobotDir(DIRECTION.getPrevious(bot.getCurDir()));
+                        bot.setRobotDir(DIRECTION.getPrevious(bot.getrobotDir()));
                         }
                     }
                     fpInstructions.append(MOVEMENT.print(x));
@@ -373,7 +373,7 @@ public class FastestPathAlgo {
         int row = bot.getRow();
         int col = bot.getCol();
 
-        switch (bot.getCurDir()) {
+        switch (bot.getrobotDir()) {
             case UP:
                 if (!exploredMap.isObstacleCell(row + 2, col - 1) && !exploredMap.isObstacleCell(row + 2, col) && !exploredMap.isObstacleCell(row + 2, col + 1)) {
                     return true;

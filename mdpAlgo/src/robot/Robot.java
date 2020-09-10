@@ -20,8 +20,6 @@ public class Robot {
 	 */
 	private Cell cell;
 	
-	public DIRECTION curDir;
-	
     private DIRECTION robotDir;
     
     private int speed;
@@ -80,8 +78,8 @@ public class Robot {
 		return this.cell;
 	}
 	
-	public DIRECTION getCurDir() {
-		return this.curDir;
+	public DIRECTION getrobotDir() {
+		return this.robotDir;
 	}
 	
 	public boolean getLeftClear() {
@@ -118,7 +116,7 @@ public class Robot {
 
 	
 	public void moveForward() {
-		switch(this.curDir) {
+		switch(this.robotDir) {
 		case LEFT:
 			this.col = this.col-1;
 			System.out.println("Moved left");
@@ -157,7 +155,7 @@ public class Robot {
 
         switch (m) {
             case FORWARD:
-                switch (this.curDir) {
+                switch (this.robotDir) {
                     case UP:
                         this.row++;
                         break;
@@ -173,7 +171,7 @@ public class Robot {
                 }
                 break;
             case BACKWARD:
-                switch (this.curDir) {
+                switch (this.robotDir) {
                     case UP:
                     	row--;
                         break;
@@ -190,7 +188,7 @@ public class Robot {
                 break;
             case TURNR:
             case TURNL:
-                curDir = findNewDirection(m);
+                robotDir = findNewDirection(m);
                 break;
             case CALIBRATE:
                 break;
@@ -217,7 +215,7 @@ public class Robot {
         comm.sendMsg(MOVEMENT.print(m) + "", CommMgr.INSTRUCTIONS);
         System.out.println("Bot Current Position: "+this.row + "," + this.col);
         if (m != MOVEMENT.CALIBRATE && sendMoveToAndroid) {
-            comm.sendMsg(this.row + "," + this.col + "," + DIRECTION.print(this.curDir), CommMgr.BOT_POS);
+            comm.sendMsg(this.row + "," + this.col + "," + DIRECTION.print(this.robotDir), CommMgr.BOT_POS);
         }
     }
     
@@ -302,7 +300,7 @@ public class Robot {
             LRRight.senseReal(explorationMap, result[0]);
 
             String[] mapStrings = MapDescriptor.generateMapDescriptor(explorationMap);
-            comm.sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + this.row + " " + this.col + " " + DIRECTION.print(this.curDir), CommMgr.MAP_STRINGS);
+            comm.sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + this.row + " " + this.col + " " + DIRECTION.print(this.robotDir), CommMgr.MAP_STRINGS);
         }
 
         return result;
@@ -345,36 +343,36 @@ public class Robot {
 //	}
 	
 	public void rotateRight() {
-		switch(this.curDir) {
+		switch(this.robotDir) {
 		case LEFT:
-			this.curDir = DIRECTION.UP;
+			this.robotDir = DIRECTION.UP;
 			break;
 		case UP:
-			this.curDir = DIRECTION.RIGHT;
+			this.robotDir = DIRECTION.RIGHT;
 			break;
 		case RIGHT:
-			this.curDir = DIRECTION.DOWN;
+			this.robotDir = DIRECTION.DOWN;
 			break;
 		case DOWN:
-			this.curDir = DIRECTION.LEFT;
+			this.robotDir = DIRECTION.LEFT;
 			break;
 		}
 //		updateSensors();
 	}
 	
 	public void rotateLeft() {
-		switch(this.curDir) {
+		switch(this.robotDir) {
 		case LEFT:
-			this.curDir = DIRECTION.DOWN;
+			this.robotDir = DIRECTION.DOWN;
 			break;
 		case UP:
-			this.curDir = DIRECTION.LEFT;
+			this.robotDir = DIRECTION.LEFT;
 			break;
 		case RIGHT:
-			this.curDir = DIRECTION.UP;
+			this.robotDir = DIRECTION.UP;
 			break;
 		case DOWN:
-			this.curDir = DIRECTION.RIGHT;
+			this.robotDir = DIRECTION.RIGHT;
 			break;
 		}
 //		updateSensors();
@@ -396,7 +394,7 @@ public class Robot {
 	
 //	public boolean checkLeftSim() {
 //		
-//		switch(this.curDir) {
+//		switch(this.robotDir) {
 //		case DOWN:
 //			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 //					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
@@ -435,7 +433,7 @@ public class Robot {
 //	}
 //	
 //	public boolean checkFrontSim() {
-//		switch(this.curDir) {
+//		switch(this.robotDir) {
 //		case RIGHT:
 //			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 //					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
@@ -474,7 +472,7 @@ public class Robot {
 //	}
 //	
 //	public boolean checkRightSim() {
-//		switch(this.curDir) {
+//		switch(this.robotDir) {
 //		case UP:
 //			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
 //					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
@@ -517,7 +515,7 @@ public class Robot {
 	
 	
 	// For copy pasting lmao
-	/** switch(this.curDir) {
+	/** switch(this.robotDir) {
 		case LEFT:
 		case UP:
 		case RIGHT:

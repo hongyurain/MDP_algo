@@ -153,68 +153,68 @@ public class Map extends JPanel {
         return !checkValidCoordinates(row, col) || getCell(row, col).getIsObstacle();
     }
 
-//    /**
-//     * Overrides JComponent's paintComponent() method. It creates a two-dimensional array of _DisplayCell objects
-//     * to store the current map state. Then, it paints square cells for the grid with the appropriate colors as
-//     * well as the robot on-screen.
-//     */
-//    public void paintComponent(Graphics g) {
-//        // Create a two-dimensional array of _DisplayCell objects for rendering.
-//        _DisplayCell[][] _mapCells = new _DisplayCell[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
-//        for (int mapRow = 0; mapRow < MapConstants.MAP_ROWS; mapRow++) {
-//            for (int mapCol = 0; mapCol < MapConstants.MAP_COLS; mapCol++) {
-//                _mapCells[mapRow][mapCol] = new _DisplayCell(mapCol * GraphicsConstants.CELL_SIZE, mapRow * GraphicsConstants.CELL_SIZE, GraphicsConstants.CELL_SIZE);
-//            }
-//        }
-//
-//        // Paint the cells with the appropriate colors.
-//        for (int mapRow = 0; mapRow < MapConstants.MAP_ROWS; mapRow++) {
-//            for (int mapCol = 0; mapCol < MapConstants.MAP_COLS; mapCol++) {
-//                Color cellColor;
-//
-//                if (inStartZone(mapRow, mapCol))
-//                    cellColor = GraphicsConstants.C_START;
-//                else if (inGoalZone(mapRow, mapCol))
-//                    cellColor = GraphicsConstants.C_GOAL;
-//                else {
-//                    if (!grid[mapRow][mapCol].getIsExplored())
-//                        cellColor = GraphicsConstants.C_UNEXPLORED;
-//                    else if (grid[mapRow][mapCol].getIsObstacle())
-//                        cellColor = GraphicsConstants.C_OBSTACLE;
-//                    else
-//                        cellColor = GraphicsConstants.C_FREE;
-//                }
-//
-//                g.setColor(cellColor);
-//                g.fillRect(_mapCells[mapRow][mapCol].cellX + GraphicsConstants.MAP_X_OFFSET, _mapCells[mapRow][mapCol].cellY, _mapCells[mapRow][mapCol].cellSize, _mapCells[mapRow][mapCol].cellSize);
-//
-//            }
-//        }
-//
-//        // Paint the robot on-screen.
-//        g.setColor(GraphicsConstants.C_ROBOT);
-//        int r = bot.getRobotPosRow();
-//        int c = bot.getRobotPosCol();
-//        g.fillOval((c - 1) * GraphicsConstants.CELL_SIZE + GraphicsConstants.ROBOT_X_OFFSET + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - (r * GraphicsConstants.CELL_SIZE + GraphicsConstants.ROBOT_Y_OFFSET), GraphicsConstants.ROBOT_W, GraphicsConstants.ROBOT_H);
-//
-//        // Paint the robot's direction indicator on-screen.
-//        g.setColor(GraphicsConstants.C_ROBOT_DIR);
-//        RobotConstants.DIRECTION d = bot.getRobotCurDir();
-//        switch (d) {
-//            case NORTH:
-//                g.fillOval(c * GraphicsConstants.CELL_SIZE + 10 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE - 15, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
-//                break;
-//            case EAST:
-//                g.fillOval(c * GraphicsConstants.CELL_SIZE + 35 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 10, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
-//                break;
-//            case SOUTH:
-//                g.fillOval(c * GraphicsConstants.CELL_SIZE + 10 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 35, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
-//                break;
-//            case WEST:
-//                g.fillOval(c * GraphicsConstants.CELL_SIZE - 15 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 10, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
-//                break;
-//        }
-//    }
+    /**
+     * Overrides JComponent's paintComponent() method. It creates a two-dimensional array of _DisplayCell objects
+     * to store the current map state. Then, it paints square cells for the grid with the appropriate colors as
+     * well as the robot on-screen.
+     */
+    public void paintComponent(Graphics g) {
+        // Create a two-dimensional array of _DisplayCell objects for rendering.
+        _DisplayCell[][] _mapCells = new _DisplayCell[MapConstants.MAP_ROWS][MapConstants.MAP_COLS];
+        for (int mapRow = 0; mapRow < MapConstants.MAP_ROWS; mapRow++) {
+            for (int mapCol = 0; mapCol < MapConstants.MAP_COLS; mapCol++) {
+                _mapCells[mapRow][mapCol] = new _DisplayCell(mapCol * GraphicsConstants.CELL_SIZE, mapRow * GraphicsConstants.CELL_SIZE, GraphicsConstants.CELL_SIZE);
+            }
+        }
+
+        // Paint the cells with the appropriate colors.
+        for (int mapRow = 0; mapRow < MapConstants.MAP_ROWS; mapRow++) {
+            for (int mapCol = 0; mapCol < MapConstants.MAP_COLS; mapCol++) {
+                Color cellColor;
+
+                if (inStartZone(mapRow, mapCol))
+                    cellColor = GraphicsConstants.C_START;
+                else if (inGoalZone(mapRow, mapCol))
+                    cellColor = GraphicsConstants.C_GOAL;
+                else {
+                    if (!grid[mapRow][mapCol].getIsExplored())
+                        cellColor = GraphicsConstants.C_UNEXPLORED;
+                    else if (grid[mapRow][mapCol].getIsObstacle())
+                        cellColor = GraphicsConstants.C_OBSTACLE;
+                    else
+                        cellColor = GraphicsConstants.C_FREE;
+                }
+
+                g.setColor(cellColor);
+                g.fillRect(_mapCells[mapRow][mapCol].cellX + GraphicsConstants.MAP_X_OFFSET, _mapCells[mapRow][mapCol].cellY, _mapCells[mapRow][mapCol].cellSize, _mapCells[mapRow][mapCol].cellSize);
+
+            }
+        }
+
+        // Paint the robot on-screen.
+        g.setColor(GraphicsConstants.C_ROBOT);
+        int r = bot.getRow();
+        int c = bot.getCol();
+        g.fillOval((c - 1) * GraphicsConstants.CELL_SIZE + GraphicsConstants.ROBOT_X_OFFSET + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - (r * GraphicsConstants.CELL_SIZE + GraphicsConstants.ROBOT_Y_OFFSET), GraphicsConstants.ROBOT_W, GraphicsConstants.ROBOT_H);
+
+        // Paint the robot's direction indicator on-screen.
+        g.setColor(GraphicsConstants.C_ROBOT_DIR);
+        RobotConstants.DIRECTION d = bot.getrobotDir();
+        switch (d) {
+            case UP:
+                g.fillOval(c * GraphicsConstants.CELL_SIZE + 10 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE - 15, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+                break;
+            case RIGHT:
+                g.fillOval(c * GraphicsConstants.CELL_SIZE + 35 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 10, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+                break;
+            case DOWN:
+                g.fillOval(c * GraphicsConstants.CELL_SIZE + 10 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 35, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+                break;
+            case LEFT:
+                g.fillOval(c * GraphicsConstants.CELL_SIZE - 15 + GraphicsConstants.MAP_X_OFFSET, GraphicsConstants.MAP_H - r * GraphicsConstants.CELL_SIZE + 10, GraphicsConstants.ROBOT_DIR_W, GraphicsConstants.ROBOT_DIR_H);
+                break;
+        }
+    }
 
     private class _DisplayCell {
         public final int cellX;
