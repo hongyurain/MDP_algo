@@ -34,9 +34,9 @@ public class Robot {
 	 *  
 	 *  			  (s3_1) (s2_1) (s1_1)
 	 *  			  (s3_0) (s2_0) (s1_0)
-	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) (s5_0) (s5_1)
+	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) 
 	 *                (ROBO) (ROBO) (ROBO) (s6_0) (s6_1) (s6_2) (s6_3) (s6_4)
-	 *                (ROBO) (ROBO) (ROBO)
+	 *  (s5_1) (s5_0) (ROBO) (ROBO) (ROBO)
 	 *  
 	 */
     private final Sensor SRFrontLeft;       // north-facing front-left SR
@@ -45,12 +45,8 @@ public class Robot {
     private final Sensor SRLeft;            // west-facing left SR
     private final Sensor SRRight;           // east-facing right SR
     private final Sensor LRRight;            // west-facing left LR
-    private boolean reachedGoal;
+    private boolean touchedGoal;
     private final boolean realBot;
-	
-    private boolean leftClear;
-    private boolean frontClear;
-    private boolean rightClear;
 	
     public Robot(int row, int col, boolean realBot) {
         this.row = row;
@@ -74,24 +70,8 @@ public class Robot {
         this.col = col;
     }
 	
-	public Cell getCurCell() {
-		return this.cell;
-	}
-	
 	public DIRECTION getrobotDir() {
 		return this.robotDir;
-	}
-	
-	public boolean getLeftClear() {
-		return this.leftClear;
-	}
-	
-	public boolean getRightClear() {
-		return this.rightClear;
-	}
-	
-	public boolean getFrontClear() {
-		return this.frontClear;
 	}
 	
 	public int getRow() {
@@ -114,30 +94,14 @@ public class Robot {
         this.speed = speed;
     }
 
-	
-	public void moveForward() {
-		switch(this.robotDir) {
-		case LEFT:
-			this.col = this.col-1;
-			System.out.println("Moved left");
-			break;
-		case UP:
-			this.row = this.row-1;
-			System.out.println("Moved up");
-			break;
-		case RIGHT:
-			this.col = this.col+1;
-			System.out.println("Moved right");
-			break;
-		case DOWN:
-			this.row = this.row+1;
-			System.out.println("Moved down");
-			break;
-		}
-		this.cell = new Cell(this.row, this.col);
-//		updateSensors();
-//		this.discoverCellsSim();
-	}
+	private void updateTouchedGoal() {
+        if (this.getRow() == MapConstants.GOAL_ROW && this.getCol() == MapConstants.GOAL_COL)
+            this.touchedGoal = true;
+    }
+
+    public boolean getTouchedGoal() {
+        return this.touchedGoal;
+    }
 	
 	/**
      * Takes in a MOVEMENT and moves the robot accordingly by changing its position and direction. Sends the movement
@@ -210,6 +174,39 @@ public class Robot {
         this.move(m, true);
     }
     
+    /**
+     * Sends a number instead of 'F' for multiple continuous forward movements.
+     */
+    public void moveForwardMultiple(int count) {
+        if (count == 1) {
+            move(MOVEMENT.FORWARD);
+        } else {
+            CommMgr comm = CommMgr.getCommMgr();
+            if (count == 10) {
+                comm.sendMsg("0", CommMgr.INSTRUCTIONS);
+            } else if (count < 10) {
+                comm.sendMsg(Integer.toString(count), CommMgr.INSTRUCTIONS);
+            }
+
+            switch (robotDir) {
+                case UP:
+                    row += count;
+                    break;
+                case RIGHT:
+                    col += count;
+                    break;
+                case DOWN:
+                    row += count;
+                    break;
+                case LEFT:
+                    col += count;
+                    break;
+            }
+
+            comm.sendMsg(this.getRow() + "," + this.getCol() + "," + DIRECTION.print(this.getrobotDir()), CommMgr.BOT_POS);
+        }
+    }
+    
     private void sendMovement(MOVEMENT m, boolean sendMoveToAndroid) {
         CommMgr comm = CommMgr.getCommMgr();
         comm.sendMsg(MOVEMENT.print(m) + "", CommMgr.INSTRUCTIONS);
@@ -265,11 +262,6 @@ public class Robot {
         }
     }
     
-    // Need MapConstants file
-    private void updateTouchedGoal() {
-        if (this.row == MapConstants.GOAL_ROW && col == MapConstants.GOAL_COL)
-            this.reachedGoal = true;
-    }
     
     public int[] sense(Map explorationMap, Map realMap) {
         int[] result = new int[6];
@@ -305,221 +297,4 @@ public class Robot {
 
         return result;
     }
-    
-    public boolean getReachedGoal() {
-        return this.reachedGoal;
-    }
-	
-
-	
-//    private void discoverCellsSim() {
-//		// Updates cell traveled and explored		
-//		//Map.grid[this.row-1][this.col-1].updateTraveled();
-//		Map.grid[this.row-1][this.col-1].updateExplored();	
-//		
-//		//Map.grid[this.row-1][this.col].updateTraveled();
-//		Map.grid[this.row-1][this.col].updateExplored();	
-//		
-//		//Map.grid[this.row-1][this.col+1].updateTraveled();
-//		Map.grid[this.row-1][this.col+1].updateExplored();	
-//	
-//		//Map.grid[this.row][this.col-1].updateTraveled();
-//		Map.grid[this.row][this.col-1].updateExplored();	
-//	
-//		Map.grid[this.row][this.col].updateTraveled();
-//		Map.grid[this.row][this.col].updateExplored();	
-//		
-//		//Map.grid[this.row][this.col+1].updateTraveled();
-//		Map.grid[this.row][this.col+1].updateExplored();	
-//		
-//		//Map.grid[this.row+1][this.col-1].updateTraveled();
-//		Map.grid[this.row+1][this.col-1].updateExplored();	
-//		
-//		//Map.grid[this.row+1][this.col].updateTraveled();
-//		Map.grid[this.row+1][this.col].updateExplored();	
-//		
-//		//Map.grid[this.row+1][this.col+1].updateTraveled();
-//		Map.grid[this.row+1][this.col+1].updateExplored();			
-//	}
-	
-	public void rotateRight() {
-		switch(this.robotDir) {
-		case LEFT:
-			this.robotDir = DIRECTION.UP;
-			break;
-		case UP:
-			this.robotDir = DIRECTION.RIGHT;
-			break;
-		case RIGHT:
-			this.robotDir = DIRECTION.DOWN;
-			break;
-		case DOWN:
-			this.robotDir = DIRECTION.LEFT;
-			break;
-		}
-//		updateSensors();
-	}
-	
-	public void rotateLeft() {
-		switch(this.robotDir) {
-		case LEFT:
-			this.robotDir = DIRECTION.DOWN;
-			break;
-		case UP:
-			this.robotDir = DIRECTION.LEFT;
-			break;
-		case RIGHT:
-			this.robotDir = DIRECTION.UP;
-			break;
-		case DOWN:
-			this.robotDir = DIRECTION.RIGHT;
-			break;
-		}
-//		updateSensors();
-	}
-	
-//	public void updateSensors() {
-//		//add code to update the boolean sensors every time this function is called
-//		//this function will be called every time the bot moves e.g. moveForward()
-//		//as long as there's one grid detected to be an obstacle or explored, set the leftClear/rightClear/frontClear as false
-//		
-//		//TEMPORARY CODE THAT USES FAKE SENSORS BELOW
-//		this.leftClear = checkLeftSim();
-//		this.rightClear = checkRightSim();
-//		this.frontClear = checkFrontSim();
-//	}
-	
-	// START OF SIMULATION CODE -----------------------------------------------------------------------
-	// FAKE SENSORS -----------------------------------------------------------------------------------
-	
-//	public boolean checkLeftSim() {
-//		
-//		switch(this.robotDir) {
-//		case DOWN:
-//			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row][this.col+1].getIsTraveled() ||
-//					Map.grid[this.row][this.col+1].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col+1].getIsVirtualWall()
-//					);
-//		case RIGHT:
-//			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row-1][this.col].getIsTraveled() ||
-//					Map.grid[this.row-1][this.col].getIsVirtualWall() 
-//					//Map.grid[this.row-1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col-1].getIsVirtualWall()
-//					);
-//		case UP:
-//			return (//Map.grid[this.row-1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col-1].getIsVirtualWall() ||
-//					Map.grid[this.row][this.col-1].getIsTraveled() ||
-//					Map.grid[this.row][this.col-1].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
-//					);
-//		case LEFT:
-//			return (//Map.grid[this.row+1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row+1][this.col].getIsTraveled() ||
-//					Map.grid[this.row+1][this.col].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
-//					);
-//		default:
-//			return false;
-//		}
-//	}
-//	
-//	public boolean checkFrontSim() {
-//		switch(this.robotDir) {
-//		case RIGHT:
-//			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row][this.col+1].getIsTraveled() ||
-//					Map.grid[this.row][this.col+1].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col+1].getIsVirtualWall()
-//					);
-//		case UP:
-//			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row-1][this.col].getIsTraveled() ||
-//					Map.grid[this.row-1][this.col].getIsVirtualWall() 
-//					//Map.grid[this.row-1][this.col-1].getIsExplored() || 
-//					//Map.grid[this.row-1][this.col-1].getIsVirtualWall()
-//					);
-//		case LEFT:
-//			return (//Map.grid[this.row-1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col-1].getIsVirtualWall() ||
-//					Map.grid[this.row][this.col-1].getIsTraveled() ||
-//					Map.grid[this.row][this.col-1].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
-//					);
-//		case DOWN:
-//			return (//Map.grid[this.row+1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row+1][this.col].getIsTraveled() ||
-//					Map.grid[this.row+1][this.col].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
-//					);
-//		default:
-//			return false;
-//		}
-//	}
-//	
-//	public boolean checkRightSim() {
-//		switch(this.robotDir) {
-//		case UP:
-//			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row][this.col+1].getIsTraveled() ||
-//					Map.grid[this.row][this.col+1].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col+1].getIsVirtualWall()
-//					);
-//		case LEFT:
-//			return (//Map.grid[this.row-1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row-1][this.col].getIsTraveled() ||
-//					Map.grid[this.row-1][this.col].getIsVirtualWall()
-//					//Map.grid[this.row-1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col-1].getIsVirtualWall()
-//					);
-//		case DOWN:
-//			return (//Map.grid[this.row-1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row-1][this.col-1].getIsVirtualWall() ||
-//					Map.grid[this.row][this.col-1].getIsTraveled() ||
-//					Map.grid[this.row][this.col-1].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
-//					);
-//		case RIGHT:
-//			return (//Map.grid[this.row+1][this.col+1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col+1].getIsVirtualWall() ||
-//					Map.grid[this.row+1][this.col].getIsTraveled() ||
-//					Map.grid[this.row+1][this.col].getIsVirtualWall() 
-//					//Map.grid[this.row+1][this.col-1].getIsExplored() ||
-//					//Map.grid[this.row+1][this.col-1].getIsVirtualWall()
-//					);
-//		default:
-//			return false;
-//		}
-//	}
-	// END OF SIMULATION CODE -----------------------------------------------------------------------
-	// ----------------------------------------------------------------------------------------------
-	
-	
-	
-	// For copy pasting lmao
-	/** switch(this.robotDir) {
-		case LEFT:
-		case UP:
-		case RIGHT:
-		case DOWN:
-		}
-	*/
 }

@@ -253,7 +253,7 @@ public class ExplorationAlgo {
      * Returns the robot to START after exploration and points the bot UPwards.
      */
     private void goHome() {
-        if (!bot.getReachedGoal() && coverageLimit == 300 && timeLimit == 3600) {
+        if (!bot.getTouchedGoal() && coverageLimit == 300 && timeLimit == 3600) {
             FastestPathAlgo goToGoal = new FastestPathAlgo(exploredMap, bot, realMap);
             goToGoal.runFastestPath(RobotConstants.GOAL_ROW, RobotConstants.GOAL_COL);
         }
