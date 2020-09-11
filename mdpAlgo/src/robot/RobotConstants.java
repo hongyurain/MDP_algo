@@ -23,7 +23,7 @@ public class RobotConstants {
     public static final int INFINITE_COST = 9999;
 
     public enum DIRECTION {
-       UP, LEFT, DOWN, RIGHT;
+        LEFT, UP, RIGHT, DOWN;                                                    
 
         public static DIRECTION getNext(DIRECTION curDirection) {
             return values()[(curDirection.ordinal() + 1) % values().length];
