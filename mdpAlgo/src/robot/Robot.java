@@ -255,7 +255,7 @@ public class Robot {
     }
     
     private DIRECTION findNewDirection(MOVEMENT m) {
-        if (m == MOVEMENT.TURNR) {
+        if (m == MOVEMENT.TURNL) {
             return DIRECTION.getNext(robotDir);
         } else {
             return DIRECTION.getPrevious(robotDir);

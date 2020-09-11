@@ -99,12 +99,12 @@ public class ExplorationAlgo {
 
 
     private void updateVisited(int row, int col){
-        Visited.visitedArr[row][col-1]=1;
         Visited.visitedArr[row][col]=1;
-        Visited.visitedArr[row][col+1]=1;
         Visited.visitedArr[row-1][col-1]=1;
         Visited.visitedArr[row-1][col]=1;
         Visited.visitedArr[row-1][col+1]=1;
+        Visited.visitedArr[row][col-1]=1;
+        Visited.visitedArr[row][col+1]=1;
         Visited.visitedArr[row+1][col-1]=1;
         Visited.visitedArr[row+1][col]=1;
         Visited.visitedArr[row+1][col+1]=1;
