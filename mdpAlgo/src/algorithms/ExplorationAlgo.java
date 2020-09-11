@@ -48,19 +48,19 @@ public class ExplorationAlgo {
 
             //CommMgr.getCommMgr().recvMsg();
             if (bot.getRealBot()) {
-                bot.move(MOVEMENT.TURNL, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.TURNL, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
-                CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.TURNR, false);
                 CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.CALIBRATE, false);
                 CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.TURNR, false);
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNL, false);
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNL, false);
             }
 
             while (true) {
