@@ -130,7 +130,7 @@ public class ExplorationAlgo {
                     break;
                 }
             }
-//            java.util.concurrent.TimeUnit.MILLISECONDS.sleep(2000);
+            java.util.concurrent.TimeUnit.MILLISECONDS.sleep(2000);
         } while (areaExplored <= coverageLimit && System.currentTimeMillis() <= endTime);
         
         /*int countNoOfRevisits = 0;
@@ -161,10 +161,9 @@ public class ExplorationAlgo {
         } else if (lookRight()) {
         	System.out.println("Right free");
             moveBot(MOVEMENT.TURNR);
-            if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else {
-//        	System.out.println("180");
-//            moveBot(MOVEMENT.TURNR);
+        	System.out.println("180");
+            moveBot(MOVEMENT.TURNR);
             moveBot(MOVEMENT.TURNR);
         }
     }
