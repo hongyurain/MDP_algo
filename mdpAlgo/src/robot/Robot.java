@@ -150,8 +150,8 @@ public class Robot {
                         break;
                 }
                 break;
-            case TURNL:
             case TURNR:
+            case TURNL:
                 robotDir = findNewDirection(m);
                 break;
             case CALIBRATE:
@@ -255,7 +255,7 @@ public class Robot {
     }
     
     private DIRECTION findNewDirection(MOVEMENT m) {
-        if (m == MOVEMENT.TURNL) {
+        if (m == MOVEMENT.TURNR) {
             return DIRECTION.getNext(robotDir);
         } else {
             return DIRECTION.getPrevious(robotDir);

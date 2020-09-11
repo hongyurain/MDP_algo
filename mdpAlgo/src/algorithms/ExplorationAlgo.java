@@ -41,9 +41,8 @@ public class ExplorationAlgo {
 
     /**
      * Main method that is called to start the exploration.
-     * @throws InterruptedException 
      */
-    public void runExploration() throws InterruptedException {
+    public void runExploration() {
         if (bot.getRealBot()) {
             System.out.println("Starting calibration...");
 
@@ -116,9 +115,8 @@ public class ExplorationAlgo {
      * 1. Robot is back at (r, c)
      * 2. areaExplored > coverageLimit
      * 3. System.currentTimeMillis() > endTime
-     * @throws InterruptedException 
      */
-    private void explorationLoop(int r, int c) throws InterruptedException {
+    private void explorationLoop(int r, int c) {
         do {
             updateVisited(bot.getRow(), bot.getCol());
             nextMove();
@@ -130,7 +128,6 @@ public class ExplorationAlgo {
                     break;
                 }
             }
-            java.util.concurrent.TimeUnit.MILLISECONDS.sleep(2000);
         } while (areaExplored <= coverageLimit && System.currentTimeMillis() <= endTime);
         
         /*int countNoOfRevisits = 0;
@@ -152,17 +149,14 @@ public class ExplorationAlgo {
      */
     private void nextMove() {
         if (lookLeft()) {
-        	System.out.println("Left free");
             moveBot(MOVEMENT.TURNL);
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else if (lookForward()) {
-        	System.out.println("Front free");
             moveBot(MOVEMENT.FORWARD);
         } else if (lookRight()) {
-        	System.out.println("Right free");
             moveBot(MOVEMENT.TURNR);
+            if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else {
-        	System.out.println("180");
             moveBot(MOVEMENT.TURNR);
             moveBot(MOVEMENT.TURNR);
         }
