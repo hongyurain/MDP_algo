@@ -59,11 +59,13 @@ public class Simulator {
             fpCol = Integer.valueOf(waypoints[1]);
             System.out.println("fpRow: " + fpRow);
             System.out.println("fpCol: " + fpCol);
-        }
+        } 
 
         bot = new Robot(RobotConstants.START_ROW, RobotConstants.START_COL, realRun);
 
         if (!realRun) {
+        	fpRow = 18;
+            fpCol = 13;
             realMap = new Map(bot);
             realMap.setAllUnexplored();
         }

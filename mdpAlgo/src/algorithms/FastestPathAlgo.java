@@ -20,7 +20,8 @@ import java.util.Stack;
  * g(n) = Real Cost from START to n
  * h(n) = Heuristic Cost from n to GOAL
  *
- * @author Suyash Lakhotia
+ * @author Yilin, Hongyu
+ ********** costH might be improved. *************
  */
 // @formatter:on
 
@@ -342,9 +343,9 @@ public class FastestPathAlgo {
                         fCount = 0;
                         // exploredMap.repaint();
                     if (x == MOVEMENT.TURNR){
-                        bot.setRobotDir(DIRECTION.getNext(bot.getrobotDir()));
-                    } else {
                         bot.setRobotDir(DIRECTION.getPrevious(bot.getrobotDir()));
+                    } else {
+                        bot.setRobotDir(DIRECTION.getNext(bot.getrobotDir()));
                         }
                     }
                     fpInstructions.append(MOVEMENT.print(x));
