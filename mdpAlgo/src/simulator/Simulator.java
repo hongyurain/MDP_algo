@@ -64,8 +64,8 @@ public class Simulator {
         bot = new Robot(RobotConstants.START_ROW, RobotConstants.START_COL, realRun);
 
         if (!realRun) {
-        	fpRow = 18;
-            fpCol = 13;
+        	fpRow = 8;
+            fpCol = 12;
             realMap = new Map(bot);
             realMap.setAllUnexplored();
         }

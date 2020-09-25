@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import robot.RobotConstants.DIRECTION;
+
 /**
  * Communication manager to communicate with the different parts of the system via the RasPi.
  *
@@ -12,13 +14,17 @@ import java.net.UnknownHostException;
 
 public class CommMgr {
 
-    public static final String EX_START = "EX_START";       // Android --> PC
-    public static final String FP_START = "FP_START";       // Android --> PC
-    public static final String MAP_STRINGS = "MAP";         // PC --> Android
-    public static final String BOT_POS = "BOT_POS";         // PC --> Android
-    public static final String BOT_START = "BOT_START";     // PC --> Arduino
-    public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino
-    public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC
+															// Arduino --> PC : waypoint in the format of row +" "+ col  eg. "3 5"
+    public static final String EX_START = "EX_START";       // Android --> PC : receive "EX_START" from Android to start exploration
+    public static final String FP_START = "FP_START";       // Android --> PC :
+    public static final String MAP_STRINGS = "MAP";         // PC --> Android : send "md"+P1+P2+robot(row+column+direction) to Android 
+    																		  //eg. ret: a list of 2 strings of hexidecimal numbers, mapStrings[0] = P1, mapStrings[1] = P2, "3,5,UP"
+    public static final String BOT_POS = "BOT_POS";         // PC --> Android : send "END" to Android to signal exploration has finished & P1,P2 are sent over  
+    													    				  //send robot row,column,direciton eg. "3,5,UP"
+    public static final String BOT_START = "BOT_START";     // PC --> Arduino : send null (type BOT_START) to Arduino to start the bot
+    public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino : during fastest path - send the whole fastest path movement (fpinstructions) to Arduino eg. "0fbrlce" 
+    																		  //during exploration - send bitwise movement instruction to Arduino eg. "f"
+    public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC : receive sensor data from Arduino eg. "1|0|2|1|2|5"
 
     private static CommMgr commMgr = null;
     private static Socket conn = null;
