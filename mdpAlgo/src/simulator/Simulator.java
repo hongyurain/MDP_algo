@@ -35,6 +35,7 @@ public class Simulator {
     private static Map realMap = null;              // real map
     private static Map exploredMap = null;          // exploration map
 
+    private static int speedLimit = robot.RobotConstants.SPEED;				// speed limit
     private static int timeLimit = 3600;            // time limit
     private static int coverageLimit = 300;         // coverage limit
 
@@ -265,13 +266,52 @@ public class Simulator {
         formatButton(btn_Exploration);
         btn_Exploration.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                CardLayout cl = ((CardLayout) _mapCards.getLayout());
-                cl.show(_mapCards, "EXPLORATION");
-                new Exploration().execute();
+            	
+            	if (!realRun){
+	            	JDialog speedExploDialog = new JDialog(_appFrame, "Set-Speed Exploration", true);
+	            	speedExploDialog.setSize(400, 60);
+	            	speedExploDialog.setLayout(new FlowLayout());
+	                final JTextField speedTF = new JTextField(5);
+	                JButton speedSaveButton = new JButton("Run");
+	            	
+	                speedSaveButton.addMouseListener(new MouseAdapter() {
+	                    public void mousePressed(MouseEvent e) {
+	                    	
+		                    	speedExploDialog.setVisible(false);
+		                        speedLimit = (int) (1000.0/(Integer.parseInt(speedTF.getText())));
+		                        bot.setSpeed(speedLimit);
+		                        System.out.println("Speed Limit:"+speedLimit);
+	                    
+	                        CardLayout cl = ((CardLayout) _mapCards.getLayout());
+	                        cl.show(_mapCards, "EXPLORATION");
+	                        new Exploration().execute();
+	                    }
+	                });
+	            	
+	
+	                speedExploDialog.add(new JLabel("Set Speed (grids per second): "));
+	                speedExploDialog.add(speedTF);
+	                speedExploDialog.add(speedSaveButton);
+	                speedExploDialog.setVisible(true);
+	            	
+            	} else {
+            		CardLayout cl = ((CardLayout) _mapCards.getLayout());
+                    cl.show(_mapCards, "EXPLORATION");
+                    new Exploration().execute();
+            	}
             }
         });
         _buttons.add(btn_Exploration);
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // Fastest Path Button
         JButton btn_FastestPath = new JButton("Fastest Path");
         formatButton(btn_FastestPath);
