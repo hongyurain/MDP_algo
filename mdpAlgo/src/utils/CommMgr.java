@@ -14,7 +14,7 @@ import robot.RobotConstants.DIRECTION;
 
 public class CommMgr {
 
-															// Arduino --> PC : waypoint in the format of row +" "+ col  eg. "3 5"
+															// Android --> PC : waypoint in the format of row +" "+ col  eg. "3 5"
     public static final String EX_START = "EX_START";       // Android --> PC : receive "EX_START" from Android to start exploration
     public static final String FP_START = "FP_START";       // Android --> PC :
     public static final String MAP_STRINGS = "MAP";         // PC --> Android : send "md"+P1+P2+robot(row+column+direction) to Android 
