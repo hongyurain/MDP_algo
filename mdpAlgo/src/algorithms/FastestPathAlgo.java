@@ -361,10 +361,10 @@ public class FastestPathAlgo {
             }
         }
 
-        System.out.println("\nMovements: " + outputString.toString());
-        System.out.println("Fastest path message to arduino" + fpInstructions.toString());
-        //CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);
-        return fpInstructions.toString();
+        System.out.println("\nMovements: " + outputString.toString());						///////////////////
+        System.out.println("Fastest path message to arduino" + fpInstructions.toString());	///////////////////
+        //CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);    // might need to change if arduino cant receive multiple forwards in 1 instruction 
+        return fpInstructions.toString();												    ///////////////////
     }
 
     /**

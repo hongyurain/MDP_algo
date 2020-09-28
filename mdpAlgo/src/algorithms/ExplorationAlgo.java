@@ -44,24 +44,31 @@ public class ExplorationAlgo {
      */
     public void runExploration() {
         if (bot.getRealBot()) {
-            System.out.println("Starting calibration...");
+            System.out.println("Starting calibration1...");
 
-            //CommMgr.getCommMgr().recvMsg();
-            if (bot.getRealBot()) {
-                bot.move(MOVEMENT.TURNR, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.TURNR, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.TURNL, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
-                CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.TURNL, false);
-            }
+//            CommMgr.getCommMgr().recvMsg();
+//            if (bot.getRealBot()) {
+//                bot.move(MOVEMENT.TURNR, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATE, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.TURNR, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATE, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.TURNL, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATE, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.TURNL, false);
+//                exploredMap.repaint();
+//            }
 
             while (true) {
                 System.out.println("Waiting for EX_START...");
@@ -93,7 +100,7 @@ public class ExplorationAlgo {
         exploredMap.repaint();
         String[] mapStrings = MapDescriptor.generateMapDescriptor(exploredMap);
         CommMgr.getCommMgr().sendMsg("md"+mapStrings[0] + " " + mapStrings[1] + " " + bot.getRow() + " " + bot.getCol() + " " + DIRECTION.print(bot.getrobotDir()), CommMgr.MAP_STRINGS);
-        CommMgr.getCommMgr().sendMsg("END", CommMgr.BOT_POS);
+        CommMgr.getCommMgr().sendMsg("E", CommMgr.BOT_POS);
     }
 
 
@@ -267,18 +274,18 @@ public class ExplorationAlgo {
         System.out.println(", " + areaExplored + " Cells");
         System.out.println((System.currentTimeMillis() - startTime) / 1000 + " Seconds");
 
-        if (bot.getRealBot()) {
-            turnBotDirection(DIRECTION.LEFT);
-            moveBot(MOVEMENT.CALIBRATE);
-            moveBot(MOVEMENT.CALIBRATE);
-            turnBotDirection(DIRECTION.DOWN);
-            moveBot(MOVEMENT.CALIBRATE);
-            moveBot(MOVEMENT.CALIBRATE);
-            turnBotDirection(DIRECTION.LEFT);
-            moveBot(MOVEMENT.CALIBRATE);
-            moveBot(MOVEMENT.CALIBRATE);
-        }
-        turnBotDirection(DIRECTION.UP);
+//        if (bot.getRealBot()) {
+//            turnBotDirection(DIRECTION.LEFT);
+//            moveBot(MOVEMENT.CALIBRATE);
+//            moveBot(MOVEMENT.CALIBRATE);
+//            turnBotDirection(DIRECTION.DOWN);
+//            moveBot(MOVEMENT.CALIBRATE);
+//            moveBot(MOVEMENT.CALIBRATE);
+//            turnBotDirection(DIRECTION.LEFT);
+//            moveBot(MOVEMENT.CALIBRATE);
+//            moveBot(MOVEMENT.CALIBRATE);
+//        }
+//        turnBotDirection(DIRECTION.UP);
     }
 
     /**

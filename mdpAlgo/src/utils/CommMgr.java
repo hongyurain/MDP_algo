@@ -21,8 +21,7 @@ public class CommMgr {
     public static final String MAP_STRINGS = "MAP";         // PC --> Android : send "md"+P1+P2+robot(row+column+direction) to Android 
     																		  //eg. ret: a list of 2 strings of hexidecimal numbers, mapStrings[0] = P1, mapStrings[1] = P2, "3,5,UP"
     public static final String BOT_POS = "BOT_POS";         // PC --> Android : send "E" to Android to signal exploration has finished & P1,P2 are sent over  
-    													    				  //send robot row,column,direciton eg. "3,5,UP"
-    
+    													    				  //send robotG row,column,direciton eg. "3,5,UP"
     public static final String BOT_START = "BOT_START";     // PC --> Arduino : (no use)send null (type BOT_START) to Arduino to start the bot
     public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino : during fastest path - send the whole fastest path movement (fpinstructions) to Arduino eg. "fpath"+"fbrlce"+"E" 
 	public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC : receive sensor data from Arduino eg. "pc:obs:5|0|2|1|2|1|msgcount0"
@@ -98,10 +97,10 @@ public class CommMgr {
             if (msg == null) {
                 outputMsg = msgType + "\n";
             } else if (msgType.equals(MAP_STRINGS) || msgType.equals(BOT_POS)) {
-                outputMsg = "AN" + msg + "Q";
+                outputMsg = msg;														/////////"AN"+ +"Q" 
             } 
             else {
-                outputMsg = "AR" + msg + "Q";
+                outputMsg = msg;														/////////"AR"+ +"Q" 
             }
 
             System.out.println("Sending out message:\n" + outputMsg);
