@@ -42,7 +42,7 @@ public class Simulator {
     private static final CommMgr comm = CommMgr.getCommMgr();
     private static int fpRow;
     private static int fpCol;
-    private static final boolean realRun = false;
+    private static final boolean realRun = true;
 
     /**
      * Initialises the different maps and displays the application.
@@ -54,7 +54,7 @@ public class Simulator {
             // Get waypoint from Android
             System.out.println("Waiting for waypoint from Android");
             String wpString = comm.recvMsg();
-            if (wpString.substring(0,2)=="wp") {
+            if (wpString.substring(0,2).equals("wp")) {
             	String[] waypoints = wpString.substring(2).split(",");
             	fpRow = Integer.valueOf(waypoints[0]);
                 fpCol = Integer.valueOf(waypoints[1]);
@@ -63,7 +63,12 @@ public class Simulator {
             }
         } 
 
-        bot = new Robot(RobotConstants.START_ROW, RobotConstants.START_COL, realRun);
+        int start_row = RobotConstants.START_ROW;
+        int start_col = RobotConstants.START_COL;
+        //listen if got start coors
+        //update start_row, start_col
+        
+        bot = new Robot(start_row, start_col, realRun);
 
         if (!realRun) {
         	fpRow = 8;
@@ -217,7 +222,7 @@ public class Simulator {
                          String msg = comm.recvMsg();
                          if (msg.equals(CommMgr.FP_START)) break;
                      }
-                    fpInstructions = "fpath" + fpInstructions;
+                    fpInstructions = "fpath" + fpInstructions + "E";
                 }
                 
                 CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);                
