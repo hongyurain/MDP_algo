@@ -53,12 +53,13 @@ public class Simulator {
             // Get waypoint from Android
             System.out.println("Waiting for waypoint from Android");
             String wpString = comm.recvMsg();
-            String[] waypoints = wpString.split(" ");
-            
-            fpRow = Integer.valueOf(waypoints[0]);
-            fpCol = Integer.valueOf(waypoints[1]);
-            System.out.println("fpRow: " + fpRow);
-            System.out.println("fpCol: " + fpCol);
+            if (wpString.substring(0,2)=="wp") {
+            	String[] waypoints = wpString.substring(2).split(",");
+            	fpRow = Integer.valueOf(waypoints[0]);
+                fpCol = Integer.valueOf(waypoints[1]);
+                System.out.println("fpRow: " + fpRow);
+                System.out.println("fpCol: " + fpCol);
+            }
         } 
 
         bot = new Robot(RobotConstants.START_ROW, RobotConstants.START_COL, realRun);
@@ -210,13 +211,14 @@ public class Simulator {
                     fpInstructions= fpInstructions+fp1+fp2;
                 }
                 if (realRun) {
-                    // while (true) {
-                    //     System.out.println("Waiting for FP_START...");
-                    //     String msg = comm.recvMsg();
-                    //     if (msg.equals(CommMgr.FP_START)) break;
-                    // }
-                    fpInstructions = "0" + fpInstructions;
+                     while (true) {
+                         System.out.println("Waiting for FP_START...");
+                         String msg = comm.recvMsg();
+                         if (msg.equals(CommMgr.FP_START)) break;
+                     }
+                    fpInstructions = "fpath" + fpInstructions;
                 }
+                
                 CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);                
                 return 222;
             }
