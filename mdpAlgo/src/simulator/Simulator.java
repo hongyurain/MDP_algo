@@ -119,61 +119,61 @@ public class Simulator {
         _appFrame.setVisible(true);
         _appFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        if (realRun) {
-        	int row, col;
-
-            row = RobotConstants.START_ROW;
-            col = RobotConstants.START_COL;
-
-            bot.setRobotPos(row, col);
-            exploredMap.repaint();
-
-            ExplorationAlgo exploration;
-            exploration = new ExplorationAlgo(exploredMap, realMap, bot, coverageLimit, timeLimit);
-            System.out.println("before running into runExploration");
-            exploration.runExploration();
-            generateMapDescriptor(exploredMap);
-            
-            /////////////////////////////////////////
-            //new FastestPath().execute();
-            
-            bot.setRobotPos(RobotConstants.START_ROW, RobotConstants.START_COL);
-            exploredMap.repaint();
-            
-            FastestPathAlgo fastestPathToWayPoint;
-            fastestPathToWayPoint = new FastestPathAlgo(exploredMap, bot);
-            String fp1 = fastestPathToWayPoint.runFastestPath(fpRow,fpCol);
-            bot.setRobotPos(fpRow,fpCol);
-
-            System.out.println("B4 goal: "+bot.getRow()+ ", "+bot.getCol());
-            FastestPathAlgo fastestPathToGoal;
-            fastestPathToGoal = new FastestPathAlgo(exploredMap, bot);
-            String fp2 = fastestPathToGoal.runFastestPath(RobotConstants.GOAL_ROW, RobotConstants.GOAL_COL);
-            String fpInstructions="";
-            if(Character.isUpperCase(fp1.charAt(fp1.length()-1)) && Character.isUpperCase(fp2.charAt(0))){
-                char c = (char)(fp1.charAt(fp1.length()-1)+fp2.charAt(0)-64);
-                fpInstructions = fpInstructions + fp1.substring(0,fp1.length()-1) + c + fp2.substring(1);
-            }   
-            else
-            {
-                fpInstructions= fpInstructions+fp1+fp2;
-            }
-            if (realRun) {
-                 while (true) {
-                     System.out.println("Waiting for FP_START...");
-                     String msg = comm.recvMsg();
-                     if (msg.equals(CommMgr.FP_START)) break;
-                 }
-                fpInstructions = "fpath" + fpInstructions + "E";
-            }
-            
-            CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);                
-            /////////////////////////
-            
-            
-            
-            
-        }
+//        if (realRun) {
+//        	int row, col;
+//
+//            row = RobotConstants.START_ROW;
+//            col = RobotConstants.START_COL;
+//
+//            bot.setRobotPos(row, col);
+//            exploredMap.repaint();
+//
+//            ExplorationAlgo exploration;
+//            exploration = new ExplorationAlgo(exploredMap, realMap, bot, coverageLimit, timeLimit);
+//            System.out.println("before running into runExploration");
+//            exploration.runExploration();
+//            generateMapDescriptor(exploredMap);
+//            
+//            /////////////////////////////////////////
+//            //new FastestPath().execute();
+//            
+//            bot.setRobotPos(RobotConstants.START_ROW, RobotConstants.START_COL);
+//            exploredMap.repaint();
+//            
+//            FastestPathAlgo fastestPathToWayPoint;
+//            fastestPathToWayPoint = new FastestPathAlgo(exploredMap, bot);
+//            String fp1 = fastestPathToWayPoint.runFastestPath(fpRow,fpCol);
+//            bot.setRobotPos(fpRow,fpCol);
+//
+//            System.out.println("B4 goal: "+bot.getRow()+ ", "+bot.getCol());
+//            FastestPathAlgo fastestPathToGoal;
+//            fastestPathToGoal = new FastestPathAlgo(exploredMap, bot);
+//            String fp2 = fastestPathToGoal.runFastestPath(RobotConstants.GOAL_ROW, RobotConstants.GOAL_COL);
+//            String fpInstructions="";
+//            if(Character.isUpperCase(fp1.charAt(fp1.length()-1)) && Character.isUpperCase(fp2.charAt(0))){
+//                char c = (char)(fp1.charAt(fp1.length()-1)+fp2.charAt(0)-64);
+//                fpInstructions = fpInstructions + fp1.substring(0,fp1.length()-1) + c + fp2.substring(1);
+//            }   
+//            else
+//            {
+//                fpInstructions= fpInstructions+fp1+fp2;
+//            }
+//            if (realRun) {
+//                 while (true) {
+//                     System.out.println("Waiting for FP_START...");
+//                     String msg = comm.recvMsg();
+//                     if (msg.equals(CommMgr.FP_START)) break;
+//                 }
+//                fpInstructions = "fpath" + fpInstructions + "z";
+//            }
+//            
+//            CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);                
+//            /////////////////////////
+//            
+//            
+//            
+//            
+//        }
     }
 
     /**
@@ -281,7 +281,13 @@ public class Simulator {
                     fpInstructions = "fpath" + fpInstructions + "z";
                 }
                 
-                CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);                
+                CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);   
+                
+                // bot (1,1)
+                // for (Move m: instructions):
+                // 
+                
+                
                 return 222;
             }
         }
@@ -300,9 +306,9 @@ public class Simulator {
                 ExplorationAlgo exploration;
                 exploration = new ExplorationAlgo(exploredMap, realMap, bot, coverageLimit, timeLimit);
 
-                if (realRun) {
-                    CommMgr.getCommMgr().sendMsg(null, CommMgr.BOT_START);
-                }
+//                if (realRun) {
+//                    CommMgr.getCommMgr().sendMsg(null, CommMgr.BOT_START);
+//                }
 
                 exploration.runExploration();
                 generateMapDescriptor(exploredMap);

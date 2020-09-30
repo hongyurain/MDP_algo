@@ -14,7 +14,7 @@ import robot.RobotConstants.DIRECTION;
 
 public class CommMgr {
 
-															// Android --> PC : waypoint in the format of row +" "+ col  eg. "3 5"
+															// Android --> PC : waypoint in the format of row +" "+ col  eg. "wp3,5"
     public static final String EX_START = "EX_START";       // Android --> PC : receive "EX_START" from Android to start exploration
     public static final String FP_START = "FP_START";       // Android --> PC : receive "FP_START" from Android to send fastest path
     

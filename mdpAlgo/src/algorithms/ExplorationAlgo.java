@@ -46,36 +46,37 @@ public class ExplorationAlgo {
         if (bot.getRealBot()) {
             System.out.println("Starting calibration1...");
 
-//            CommMgr.getCommMgr().recvMsg();
-//            if (bot.getRealBot()) {
-//                bot.move(MOVEMENT.TURNR, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNR, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-//            }
-
+            //CommMgr.getCommMgr().recvMsg();
             while (true) {
                 System.out.println("Waiting for EX_START...");
                 String msg = CommMgr.getCommMgr().recvMsg();
                 //String[] msgArr = msg.split(";");
                 if (msg.equals(CommMgr.EX_START)) break;
             }
+            if (bot.getRealBot()) {
+                bot.move(MOVEMENT.TURNR, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNR, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
+            }
+
+            
         }
 
         System.out.println("Starting exploration...");
@@ -83,9 +84,9 @@ public class ExplorationAlgo {
         startTime = System.currentTimeMillis();
         endTime = startTime + (timeLimit * 1000);
 
-        if (bot.getRealBot()) {
-            CommMgr.getCommMgr().sendMsg(null, CommMgr.BOT_START);
-        }
+//        if (bot.getRealBot()) {
+//            CommMgr.getCommMgr().sendMsg(null, CommMgr.BOT_START);
+//        }
         // senseAndRepaint();
         bot.setSensors();
         // bot.sense(exploredMap, realMap);
