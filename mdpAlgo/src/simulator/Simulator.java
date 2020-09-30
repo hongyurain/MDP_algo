@@ -278,7 +278,7 @@ public class Simulator {
                          String msg = comm.recvMsg();
                          if (msg.equals(CommMgr.FP_START)) break;
                      }
-                    fpInstructions = "fpath" + fpInstructions + "E";
+                    fpInstructions = "fpath" + fpInstructions + "z";
                 }
                 
                 CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);                
