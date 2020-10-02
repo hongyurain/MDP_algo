@@ -71,11 +71,11 @@ public class ExplorationAlgo {
                 CommMgr.getCommMgr().recvMsg();
                 bot.move(MOVEMENT.CALIBRATE, false);
                 exploredMap.repaint();
-                CommMgr.getCommMgr().recvMsg();
+                CommMgr.getCommMgr().recvMsg();                                                      
                 bot.move(MOVEMENT.TURNL, false);
                 exploredMap.repaint();
             }
-
+            CommMgr.getCommMgr().recvMsg();
             
         }
 
@@ -275,18 +275,18 @@ public class ExplorationAlgo {
         System.out.println(", " + areaExplored + " Cells");
         System.out.println((System.currentTimeMillis() - startTime) / 1000 + " Seconds");
 
-//        if (bot.getRealBot()) {
-//            turnBotDirection(DIRECTION.LEFT);
-//            moveBot(MOVEMENT.CALIBRATE);
-//            moveBot(MOVEMENT.CALIBRATE);
-//            turnBotDirection(DIRECTION.DOWN);
-//            moveBot(MOVEMENT.CALIBRATE);
-//            moveBot(MOVEMENT.CALIBRATE);
-//            turnBotDirection(DIRECTION.LEFT);
-//            moveBot(MOVEMENT.CALIBRATE);
-//            moveBot(MOVEMENT.CALIBRATE);
-//        }
-//        turnBotDirection(DIRECTION.UP);
+        if (bot.getRealBot()) {
+            turnBotDirection(DIRECTION.LEFT);
+            moveBot(MOVEMENT.CALIBRATE);
+            moveBot(MOVEMENT.CALIBRATE);
+            turnBotDirection(DIRECTION.DOWN);
+            moveBot(MOVEMENT.CALIBRATE);
+            moveBot(MOVEMENT.CALIBRATE);
+            turnBotDirection(DIRECTION.LEFT);
+            moveBot(MOVEMENT.CALIBRATE);
+            moveBot(MOVEMENT.CALIBRATE);
+        }
+        turnBotDirection(DIRECTION.UP);
     }
 
     /**

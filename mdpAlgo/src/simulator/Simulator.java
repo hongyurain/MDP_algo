@@ -8,6 +8,7 @@ import map.Visited;
 import robot.Robot;
 import robot.RobotConstants;
 import robot.RobotConstants.DIRECTION;
+import robot.RobotConstants.MOVEMENT;
 import utils.CommMgr;
 
 import javax.swing.*;
@@ -272,7 +273,9 @@ public class Simulator {
                 {
                     fpInstructions= fpInstructions+fp1+fp2;
                 }
+                System.out.println("Just finished finding fpInstructions:"+fpInstructions);
                 if (realRun) {
+                	System.out.println("GOING INTO THE while loop");
                      while (true) {
                          System.out.println("Waiting for FP_START...");
                          String msg = comm.recvMsg();
@@ -280,13 +283,57 @@ public class Simulator {
                      }
                     fpInstructions = "fpath" + fpInstructions + "z";
                 }
-                
+                //send fpinstructions to rpi
                 CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);   
                 
+                ///////////////////////////////////////////////////////////////////////////////////////
                 // bot (1,1)
-                // for (Move m: instructions):
-                // 
+                bot.setRobotPos(1,1);
+                exploredMap.repaint();
                 
+                bot.setRobotDir(DIRECTION.UP);
+                exploredMap.repaint();
+                
+                String movements = fp1 + fp2;
+                
+                for (int i=0;i<(movements.length());i++) {
+                	
+                	switch (movements.charAt(i)) {
+                    	case 'f':
+                    		switch (bot.getrobotDir()) {
+	                            case UP:
+		                            bot.setRobotPos(bot.getRow()+1,bot.getCol());
+		                            break;
+                             case RIGHT:
+		                            bot.setRobotPos(bot.getRow(),bot.getCol()+1);
+                                 break;
+                             case DOWN:
+		                            bot.setRobotPos(bot.getRow()-1,bot.getCol());
+                                 break;
+                             case LEFT:
+		                            bot.setRobotPos(bot.getRow(),bot.getCol()-1);
+                                 break;
+                         }
+	                         break;
+	                    case 'r':
+	                    	 bot.setRobotDir(DIRECTION.getPrevious(bot.getrobotDir()));
+	                    	 break;
+	                    case 'l':
+	                    	 bot.setRobotDir(DIRECTION.getNext(bot.getrobotDir()));
+	                         break;
+	                    
+	                    default:
+	                         System.out.println("Error in Robot.move()!");
+	                         break;
+                 }
+                	System.out.println("FP Move: " + movements.charAt(i));
+                	
+                	
+                	
+                	///////////////////////////
+                	exploredMap.repaint();	
+                }
+//                /////////////////////////////////////////////////////////////////////////////////////
                 
                 return 222;
             }
@@ -311,8 +358,10 @@ public class Simulator {
 //                }
 
                 exploration.runExploration();
+            	System.out.println("Just finished exploration.runExploration(); WE ARE GONNA RUN generateMapDescriptor(exploredMap);");
                 generateMapDescriptor(exploredMap);
-
+                System.out.println("Just finished generateMapDescriptor(exploredMap);");
+                
                 // for(int i=0; i<20;i++){
                 //     for(int j=0;j<15;j++){
                 //         System.out.print(Visited.visitedArr[i][j]);
@@ -321,6 +370,7 @@ public class Simulator {
                 // }
 
                 if (realRun) {
+                	System.out.println("WE ARE GONNA RUN FastestPath().execute();");
                     new FastestPath().execute();
                 }
 

@@ -306,7 +306,7 @@ public class FastestPathAlgo {
             outputString.append(MOVEMENT.print(m));
         }
 
-        if (!bot.getRealBot() || explorationMode) {
+        if (!bot.getRealBot() || explorationMode) {													///////////////////////////
             for (MOVEMENT x : movements) {
                 if (x == MOVEMENT.FORWARD) {
                     if (!canMoveForward()) {
@@ -315,8 +315,8 @@ public class FastestPathAlgo {
                     }
                 }
 
-                bot.move(x);
-                this.exploredMap.repaint();
+                bot.move(x);																		///////////////////////////
+                this.exploredMap.repaint();															///////////////////////////
 
                 // During exploration, use sensor data to update exploredMap.
                 if (explorationMode) {
@@ -350,8 +350,8 @@ public class FastestPathAlgo {
                     }
                     fpInstructions.append(MOVEMENT.print(x));
 
-                    // bot.move(x);
-                    // exploredMap.repaint();
+                    bot.move(x);															//////////////////
+                    exploredMap.repaint();													//////////////////
                 }
             }
             if (fCount > 0) {
