@@ -419,6 +419,7 @@ public class ExplorationAlgo {
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
         turnBotDirection(origDir);
+        moveBot(MOVEMENT.CALIBRATEL);					//////////////////////////////////////////////////////////
     }
 
     /**

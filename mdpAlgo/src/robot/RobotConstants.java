@@ -50,7 +50,7 @@ public class RobotConstants {
     }
 
     public enum MOVEMENT {
-        FORWARD, BACKWARD, TURNR, TURNL, CALIBRATE, ERROR;
+        FORWARD, BACKWARD, TURNR, TURNL, CALIBRATE, CALIBRATEL, ERROR;
 
         public static char print(MOVEMENT m) {
             switch (m) {
@@ -64,6 +64,8 @@ public class RobotConstants {
                     return 'l';
                 case CALIBRATE:
                     return 'c';
+                case CALIBRATEL:
+                	return 'p';
                 case ERROR:
                 default:
                     return 'e';
