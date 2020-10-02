@@ -156,6 +156,8 @@ public class Robot {
                 break;
             case CALIBRATE:
                 break;
+            case CALIBRATEL:
+                break;
             default:
                 System.out.println("Error in Robot.move()!");
                 break;

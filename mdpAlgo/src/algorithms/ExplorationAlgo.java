@@ -74,6 +74,11 @@ public class ExplorationAlgo {
                 CommMgr.getCommMgr().recvMsg();                                                      
                 bot.move(MOVEMENT.TURNL, false);
                 exploredMap.repaint();
+//
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATEL, false);	
+//                exploredMap.repaint();
+                
             }
             CommMgr.getCommMgr().recvMsg();
             
@@ -332,7 +337,7 @@ public class ExplorationAlgo {
     private void moveBot(MOVEMENT m) {
         bot.move(m);
         exploredMap.repaint();
-        if (m != MOVEMENT.CALIBRATE) {
+        if ((m != MOVEMENT.CALIBRATE)&&(m != MOVEMENT.CALIBRATEL)) {
             senseAndRepaint();
         } else {
             CommMgr commMgr = CommMgr.getCommMgr();
@@ -419,7 +424,7 @@ public class ExplorationAlgo {
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
         turnBotDirection(origDir);
-        moveBot(MOVEMENT.CALIBRATEL);					//////////////////////////////////////////////////////////
+//        moveBot(MOVEMENT.CALIBRATEL);		
     }
 
     /**

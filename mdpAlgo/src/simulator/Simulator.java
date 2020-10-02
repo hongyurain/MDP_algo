@@ -371,6 +371,18 @@ public class Simulator {
 
                 if (realRun) {
                 	System.out.println("WE ARE GONNA RUN FastestPath().execute();");
+                	DIRECTION direction = bot.getrobotDir();
+                	if (direction == DIRECTION.LEFT) 
+                    	bot.move(MOVEMENT.TURNR, true);
+                		
+                	else if (direction == DIRECTION.RIGHT)
+                    	bot.move(MOVEMENT.TURNL, true);
+                	else if (direction == DIRECTION.DOWN) 
+                		{
+                		bot.move(MOVEMENT.TURNR, true);
+                    	bot.move(MOVEMENT.TURNR, true);
+                    	}
+                        		
                     new FastestPath().execute();
                 }
 
