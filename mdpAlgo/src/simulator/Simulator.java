@@ -294,7 +294,19 @@ public class Simulator {
                 bot.setRobotDir(DIRECTION.UP);
                 exploredMap.repaint();
                 
-                String movements = fp1 + fp2;
+                String movementUpper = fp1 + fp2;
+                String movements = new String();
+                for (int i=0;i<(movementUpper.length());i++) {
+                	if (movementUpper.charAt(i)>64 && movementUpper.charAt(i)<= 90) {
+                		int count=movementUpper.charAt(i)-64;
+                		for (int j=0;j<count;j++) {
+                			movements=movements + 'f';
+                		}
+                	}
+                	else{
+                		movements=movements + movementUpper.charAt(i);
+                	}
+                }
                 
                 for (int i=0;i<(movements.length());i++) {
                 	

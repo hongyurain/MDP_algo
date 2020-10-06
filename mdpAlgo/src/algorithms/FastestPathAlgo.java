@@ -350,7 +350,7 @@ public class FastestPathAlgo {
                     }
                     fpInstructions.append(MOVEMENT.print(x));
 
-                    bot.move(x);															//////////////////
+                    //bot.move(x);															//////////////////
                     exploredMap.repaint();													//////////////////
                 }
             }
