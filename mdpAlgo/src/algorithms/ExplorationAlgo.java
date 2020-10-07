@@ -74,10 +74,13 @@ public class ExplorationAlgo {
                 CommMgr.getCommMgr().recvMsg();                                                      
                 bot.move(MOVEMENT.TURNL, false);
                 exploredMap.repaint();
-//
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATEL, false);	
-//                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();                                                      
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
+
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATEL, false);	
+                exploredMap.repaint();
                 
             }
             CommMgr.getCommMgr().recvMsg();
@@ -292,6 +295,7 @@ public class ExplorationAlgo {
             moveBot(MOVEMENT.CALIBRATE);
         }
         turnBotDirection(DIRECTION.UP);
+        moveBot(MOVEMENT.CALIBRATEL);
     }
 
     /**
@@ -352,7 +356,8 @@ public class ExplorationAlgo {
                 moveBot(MOVEMENT.CALIBRATE);
             } else {
                 lastCalibrate++;
-                if (lastCalibrate >= 5) {
+                //calibrate after 3 steps
+                if (lastCalibrate >= 3) {
                     DIRECTION targetDir = getCalibrationDirection();
                     if (targetDir != null) {
                         lastCalibrate = 0;
@@ -424,7 +429,7 @@ public class ExplorationAlgo {
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
         turnBotDirection(origDir);
-//        moveBot(MOVEMENT.CALIBRATEL);		
+        moveBot(MOVEMENT.CALIBRATEL);		
     }
 
     /**
