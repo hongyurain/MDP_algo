@@ -6,6 +6,7 @@ import map.Cell;
 import robot.RobotConstants.DIRECTION;
 import robot.RobotConstants.MOVEMENT;
 import utils.*;
+import java.util.Scanner;
 
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +48,7 @@ public class Robot {
     private final Sensor LRRight;            // west-facing left LR
     private boolean touchedGoal;
     private final boolean realBot;
+    Scanner myObj = new Scanner(System.in);
 	
     public Robot(int row, int col, boolean realBot) {
         this.row = row;
@@ -151,6 +153,8 @@ public class Robot {
                 }
                 break;
             case TURNR:
+            	robotDir = findNewDirection(m);
+            	break;
             case TURNL:
                 robotDir = findNewDirection(m);
                 break;
@@ -162,7 +166,8 @@ public class Robot {
                 System.out.println("Error in Robot.move()!");
                 break;
         }
-
+//        System.out.println("Go next line?");
+//        String test = myObj.nextLine();
         if (realBot) sendMovement(m, false);
         else System.out.println("Move: " + MOVEMENT.print(m));
 
@@ -213,7 +218,7 @@ public class Robot {
         CommMgr comm = CommMgr.getCommMgr();
         comm.sendMsg(MOVEMENT.print(m) + "", CommMgr.INSTRUCTIONS);
         System.out.println("Bot Current Position: "+this.row + "," + this.col);
-        if (m != MOVEMENT.CALIBRATE && sendMoveToAndroid) {
+        if (m != MOVEMENT.CALIBRATE && m != MOVEMENT.CALIBRATEL && sendMoveToAndroid) {
             comm.sendMsg(this.row + "," + this.col + "," + DIRECTION.print(this.robotDir), CommMgr.BOT_POS);
         }
     }

@@ -29,6 +29,7 @@ public class ExplorationAlgo {
     private long startTime;
     private long endTime;
     private int lastCalibrate;
+    private int lastCalibrateL;
     private boolean calibrationMode;
 
     public ExplorationAlgo(Map exploredMap, Map realMap, Robot bot, int coverageLimit, int timeLimit) {
@@ -54,36 +55,71 @@ public class ExplorationAlgo {
                 if (msg.equals(CommMgr.EX_START)) break;
             }
             if (bot.getRealBot()) {
-                bot.move(MOVEMENT.TURNR, false);
+//                bot.move(MOVEMENT.TURNR, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATE, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.TURNR, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATE, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.TURNL, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();
+//                bot.move(MOVEMENT.CALIBRATE, false);
+//                exploredMap.repaint();
+//                CommMgr.getCommMgr().recvMsg();                                                      
+//                bot.move(MOVEMENT.TURNL, false);
+//                exploredMap.repaint();
+                bot.move(MOVEMENT.CALIBRATEL);
                 exploredMap.repaint();
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
+                bot.move(MOVEMENT.TURNL);
                 exploredMap.repaint();
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.TURNR, false);
+                bot.move(MOVEMENT.CALIBRATE);
                 exploredMap.repaint();
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
+                bot.move(MOVEMENT.CALIBRATEL);
                 exploredMap.repaint();
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.TURNL, false);
+                bot.move(MOVEMENT.TURNL);
                 exploredMap.repaint();
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATE, false);
+                bot.move(MOVEMENT.CALIBRATE);
                 exploredMap.repaint();
-                CommMgr.getCommMgr().recvMsg();                                                      
-                bot.move(MOVEMENT.TURNL, false);
-                exploredMap.repaint();
-                CommMgr.getCommMgr().recvMsg();                                                      
-                bot.move(MOVEMENT.TURNL, false);
-                exploredMap.repaint();
-
                 CommMgr.getCommMgr().recvMsg();
-                bot.move(MOVEMENT.CALIBRATEL, false);	
+                bot.move(MOVEMENT.TURNR);
                 exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATEL);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNR);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATEL);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNR);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                
+                
+                
+//                CommMgr.getCommMgr().recvMsg();                                                      
+//                bot.move(MOVEMENT.TURNL, false);
+//                exploredMap.repaint();
                 
             }
-            CommMgr.getCommMgr().recvMsg();
+//            CommMgr.getCommMgr().recvMsg();
             
         }
 
@@ -166,15 +202,21 @@ public class ExplorationAlgo {
     private void nextMove() {
         if (lookLeft()) {
             moveBot(MOVEMENT.TURNL);
+            System.out.println("LEFT CLEAR");
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else if (lookForward()) {
             moveBot(MOVEMENT.FORWARD);
+            System.out.println("FRONT CLEAR");
         } else if (lookRight()) {
             moveBot(MOVEMENT.TURNR);
-            if (lookForward()) moveBot(MOVEMENT.FORWARD);
+//            System.out.println("RIGHT CLEAR");
+//            if (lookForward()) moveBot(MOVEMENT.FORWARD);
+//        } else {
+//            moveBot(MOVEMENT.TURNR);
+//            moveBot(MOVEMENT.TURNR);
         } else {
-            moveBot(MOVEMENT.TURNR);
-            moveBot(MOVEMENT.TURNR);
+        	moveBot(MOVEMENT.TURNR);
+        	moveBot(MOVEMENT.TURNR);
         }
     }
 
@@ -341,7 +383,7 @@ public class ExplorationAlgo {
     private void moveBot(MOVEMENT m) {
         bot.move(m);
         exploredMap.repaint();
-        if ((m != MOVEMENT.CALIBRATE)&&(m != MOVEMENT.CALIBRATEL)) {
+        if ((m != MOVEMENT.CALIBRATE) && (m != MOVEMENT.CALIBRATEL)) {
             senseAndRepaint();
         } else {
             CommMgr commMgr = CommMgr.getCommMgr();
@@ -354,15 +396,33 @@ public class ExplorationAlgo {
             if (canCalibrateOnTheSpot(bot.getrobotDir())) {
                 lastCalibrate = 0;
                 moveBot(MOVEMENT.CALIBRATE);
+                if (canCalibrateLOnTheSpot(bot.getrobotDir())) {
+                	lastCalibrateL = 0;
+                	moveBot(MOVEMENT.CALIBRATEL);
+                }
             } else {
                 lastCalibrate++;
+                lastCalibrateL++;
                 //calibrate after 3 steps
                 if (lastCalibrate >= 3) {
                     DIRECTION targetDir = getCalibrationDirection();
+                    DIRECTION targetDirL = getCalibrationLDirection();
                     if (targetDir != null) {
                         lastCalibrate = 0;
+                        lastCalibrateL = 0;
                         calibrateBot(targetDir);
                     }
+                    else if (targetDirL != null) {
+                    	moveBot(MOVEMENT.CALIBRATEL);
+                    }
+                    
+                }
+                if (lastCalibrateL >= 3) {
+                	DIRECTION targetDirL = getCalibrationLDirection();
+                	if (targetDirL != null) {
+                		lastCalibrateL = 0;
+                		moveBot(MOVEMENT.CALIBRATEL);
+                	}
                 }
             }
 
@@ -399,6 +459,24 @@ public class ExplorationAlgo {
 
         return false;
     }
+    
+    private boolean canCalibrateLOnTheSpot(DIRECTION botDir) {
+    	int row = bot.getRow();
+        int col = bot.getCol();
+
+        switch (botDir) {
+            case UP:
+                return exploredMap.getIsObstacleOrWall(row + 1, col - 2);
+            case RIGHT:
+                return exploredMap.getIsObstacleOrWall(row + 2, col + 1);
+            case DOWN:
+                return exploredMap.getIsObstacleOrWall(row - 1, col + 2);
+            case LEFT:
+                return exploredMap.getIsObstacleOrWall(row - 2, col - 1);
+        }
+
+        return false;
+    }
 
     /**
      * Returns a possible direction for robot calibration or null, otherwise.
@@ -415,6 +493,22 @@ public class ExplorationAlgo {
 
         dirToCheck = DIRECTION.getPrevious(dirToCheck);             // u turn
         if (canCalibrateOnTheSpot(dirToCheck)) return dirToCheck;
+
+        return null;
+    }
+    
+    private DIRECTION getCalibrationLDirection() {
+        DIRECTION origDir = bot.getrobotDir();
+        DIRECTION dirToCheck;
+
+        dirToCheck = DIRECTION.getNext(origDir);                    // left turn
+        if (canCalibrateLOnTheSpot(dirToCheck)) return dirToCheck;
+
+        dirToCheck = DIRECTION.getPrevious(origDir);                // right turn
+        if (canCalibrateLOnTheSpot(dirToCheck)) return dirToCheck;
+
+        dirToCheck = DIRECTION.getPrevious(dirToCheck);             // u turn
+        if (canCalibrateLOnTheSpot(dirToCheck)) return dirToCheck;
 
         return null;
     }
