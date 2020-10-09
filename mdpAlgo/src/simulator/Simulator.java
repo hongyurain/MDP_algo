@@ -337,12 +337,10 @@ public class Simulator {
 	                    default:
 	                         System.out.println("Error in Robot.move()!");
 	                         break;
-                 }
+	                
+                	}
                 	System.out.println("FP Move: " + movements.charAt(i));
                 	
-                	
-                	
-                	///////////////////////////
                 	exploredMap.repaint();	
                 }
 //                /////////////////////////////////////////////////////////////////////////////////////
@@ -393,8 +391,10 @@ public class Simulator {
                 		{
                 		bot.move(MOVEMENT.TURNR, true);
                     	bot.move(MOVEMENT.TURNR, true);
-                    	}
+            
+             }
                         		
+                	bot.move(MOVEMENT.TURNR, true);
                     new FastestPath().execute();
                 }
 
