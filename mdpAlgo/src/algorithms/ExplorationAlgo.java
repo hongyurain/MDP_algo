@@ -74,13 +74,13 @@ public class ExplorationAlgo {
                 CommMgr.getCommMgr().recvMsg();                                                      
                 bot.move(MOVEMENT.TURNL, false);
                 exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();                                                      
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-//
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATEL, false);	
-//                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();                                                      
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
+
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATEL, false);	
+                exploredMap.repaint();
                 
             }
             CommMgr.getCommMgr().recvMsg();
@@ -364,11 +364,8 @@ public class ExplorationAlgo {
                         calibrateBot(targetDir);
                     }
                 }
-                
             }
-            if (canCalibrateLOnTheSpot(bot.getrobotDir())) {
-            	moveBot(MOVEMENT.CALIBRATEL);
-            }
+
             calibrationMode = false;
         }
     }
@@ -398,23 +395,6 @@ public class ExplorationAlgo {
                 return exploredMap.getIsObstacleOrWall(row - 2, col - 1) && exploredMap.getIsObstacleOrWall(row - 2, col) && exploredMap.getIsObstacleOrWall(row - 2, col + 1);
             case LEFT:
                 return exploredMap.getIsObstacleOrWall(row + 1, col - 2) && exploredMap.getIsObstacleOrWall(row, col - 2) && exploredMap.getIsObstacleOrWall(row - 1, col - 2);
-        }
-
-        return false;
-    }
-    private boolean canCalibrateLOnTheSpot(DIRECTION botDir) {
-    	int row = bot.getRow();
-        int col = bot.getCol();
-
-        switch (botDir) {
-            case UP:
-                return exploredMap.getIsObstacleOrWall(row + 1, col - 2) && exploredMap.getIsObstacleOrWall(row - 1, col - 2);
-            case RIGHT:
-                return exploredMap.getIsObstacleOrWall(row + 2, col + 1) && exploredMap.getIsObstacleOrWall(row + 2, col - 1);
-            case DOWN:
-                return exploredMap.getIsObstacleOrWall(row - 1, col + 2) && exploredMap.getIsObstacleOrWall(row + 1, col + 2);
-            case LEFT:
-                return exploredMap.getIsObstacleOrWall(row - 2, col - 1) && exploredMap.getIsObstacleOrWall(row - 2, col + 1);
         }
 
         return false;
@@ -449,7 +429,7 @@ public class ExplorationAlgo {
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
         turnBotDirection(origDir);
-        //moveBot(MOVEMENT.CALIBRATEL);		
+        moveBot(MOVEMENT.CALIBRATEL);		
     }
 
     /**

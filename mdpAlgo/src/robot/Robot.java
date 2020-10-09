@@ -6,7 +6,6 @@ import map.Cell;
 import robot.RobotConstants.DIRECTION;
 import robot.RobotConstants.MOVEMENT;
 import utils.*;
-import java.util.Scanner;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,7 +47,6 @@ public class Robot {
     private final Sensor LRRight;            // west-facing left LR
     private boolean touchedGoal;
     private final boolean realBot;
-    Scanner myObj = new Scanner(System.in);
 	
     public Robot(int row, int col, boolean realBot) {
         this.row = row;
@@ -61,9 +59,9 @@ public class Robot {
         SRFrontLeft = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, this.robotDir, "SRFL");
         SRFrontCenter = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col, this.robotDir, "SRFC");
         SRFrontRight = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col + 1, this.robotDir, "SRFR");
-        SRLeftFront = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRLF");
-        SRLeftBack = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRLB");
-        LRRight = new Sensor(RobotConstants.SENSOR_LONG_RANGE_L, RobotConstants.SENSOR_LONG_RANGE_H, this.row, this.col + 1, findNewDirection(MOVEMENT.TURNR), "LRR");
+        SRLeftFront = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRL");
+        SRLeftBack = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRR");
+        LRRight = new Sensor(RobotConstants.SENSOR_LONG_RANGE_L, RobotConstants.SENSOR_LONG_RANGE_H, this.row, this.col + 1, findNewDirection(MOVEMENT.TURNR), "LRL");
     }
 	
 	
@@ -164,8 +162,7 @@ public class Robot {
                 System.out.println("Error in Robot.move()!");
                 break;
         }
-        System.out.println("Go next move?");
-        String tes = myObj.nextLine();
+
         if (realBot) sendMovement(m, false);
         else System.out.println("Move: " + MOVEMENT.print(m));
 
