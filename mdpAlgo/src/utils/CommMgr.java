@@ -96,8 +96,8 @@ public class CommMgr {
             String outputMsg;
             if (msg == null) {
                 outputMsg = msgType + "\n";
-            } else if (msgType.equals(MAP_STRINGS) || msgType.equals(BOT_POS)) {
-                outputMsg = msg;														/////////"AN"+ +"Q" 
+//            } else if (msgType.equals(MAP_STRINGS) || msgType.equals(BOT_POS)) {
+//                outputMsg = msg;														/////////"AN"+ +"Q" 
             } 
             else {
                 outputMsg = msg;														/////////"AR"+ +"Q" 

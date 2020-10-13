@@ -57,8 +57,8 @@ public class Simulator {
             String wpString = comm.recvMsg();
             if (wpString.substring(0,2).equals("wp")) {
             	String[] waypoints = wpString.substring(2).split(",");
-            	fpRow = Integer.valueOf(waypoints[0]);
-                fpCol = Integer.valueOf(waypoints[1]);
+            	fpRow = Integer.valueOf(waypoints[1]);
+                fpCol = Integer.valueOf(waypoints[0]);
                 System.out.println("fpRow: " + fpRow);
                 System.out.println("fpCol: " + fpCol);
             }

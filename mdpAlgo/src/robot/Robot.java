@@ -61,9 +61,9 @@ public class Robot {
         SRFrontLeft = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, this.robotDir, "SRFL");
         SRFrontCenter = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col, this.robotDir, "SRFC");
         SRFrontRight = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col + 1, this.robotDir, "SRFR");
-        SRLeftFront = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRLF");
-        SRLeftBack = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRLB");
-        LRRight = new Sensor(RobotConstants.SENSOR_LONG_RANGE_L, RobotConstants.SENSOR_LONG_RANGE_H, this.row, this.col + 1, findNewDirection(MOVEMENT.TURNR), "LRR");
+        SRLeftFront = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRL");
+        SRLeftBack = new Sensor(RobotConstants.SENSOR_SHORT_RANGE_L, RobotConstants.SENSOR_SHORT_RANGE_H, this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL), "SRR");
+        LRRight = new Sensor(RobotConstants.SENSOR_LONG_RANGE_L, RobotConstants.SENSOR_LONG_RANGE_H, this.row+1, this.col + 1, findNewDirection(MOVEMENT.TURNR), "LRL");
     }
 	
 	
@@ -164,8 +164,8 @@ public class Robot {
                 System.out.println("Error in Robot.move()!");
                 break;
         }
-        System.out.println("Go next move?");
-        String tes = myObj.nextLine();
+//        System.out.println("Go next move?");
+//        String tes = myObj.nextLine();
         if (realBot) sendMovement(m, false);
         else System.out.println("Move: " + MOVEMENT.print(m));
 
@@ -216,7 +216,7 @@ public class Robot {
         CommMgr comm = CommMgr.getCommMgr();
         comm.sendMsg(MOVEMENT.print(m) + "", CommMgr.INSTRUCTIONS);
         System.out.println("Bot Current Position: "+this.row + "," + this.col);
-        if (m != MOVEMENT.CALIBRATE && sendMoveToAndroid) {
+        if (m != MOVEMENT.CALIBRATE && m != MOVEMENT.CALIBRATEL && sendMoveToAndroid) {
             comm.sendMsg(this.row + "," + this.col + "," + DIRECTION.print(this.robotDir), CommMgr.BOT_POS);
         }
     }
@@ -229,7 +229,7 @@ public class Robot {
                 SRFrontRight.setSensor(this.row + 1, this.col + 1, this.robotDir);
                 SRLeftFront.setSensor(this.row + 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
                 SRLeftBack.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row, this.col + 1, findNewDirection(MOVEMENT.TURNR));
+                LRRight.setSensor(this.row+1, this.col + 1, findNewDirection(MOVEMENT.TURNR));
                 break;
             case RIGHT:
                 SRFrontLeft.setSensor(this.row + 1, this.col + 1, this.robotDir);
@@ -237,7 +237,7 @@ public class Robot {
                 SRFrontRight.setSensor(this.row - 1, this.col + 1, this.robotDir);
                 SRLeftFront.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
                 SRLeftBack.setSensor(this.row +1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row - 1, this.col, findNewDirection(MOVEMENT.TURNR));
+                LRRight.setSensor(this.row - 1, this.col+1, findNewDirection(MOVEMENT.TURNR));
                 break;
             case DOWN:
                 SRFrontLeft.setSensor(this.row - 1, this.col + 1, this.robotDir);
@@ -245,7 +245,7 @@ public class Robot {
                 SRFrontRight.setSensor(this.row - 1, this.col - 1, this.robotDir);
                 SRLeftFront.setSensor(this.row - 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
                 SRLeftBack.setSensor(this.row + 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row, this.col - 1, findNewDirection(MOVEMENT.TURNR));
+                LRRight.setSensor(this.row-1, this.col - 1, findNewDirection(MOVEMENT.TURNR));
                 break;
             case LEFT:
                 SRFrontLeft.setSensor(this.row - 1, this.col - 1, this.robotDir);
@@ -253,7 +253,7 @@ public class Robot {
                 SRFrontRight.setSensor(this.row + 1, this.col - 1, this.robotDir);
                 SRLeftFront.setSensor(this.row - 1, this.col - 1, findNewDirection(MOVEMENT.TURNL));
                 SRLeftBack.setSensor(this.row - 1, this.col + 1, findNewDirection(MOVEMENT.TURNL));
-                LRRight.setSensor(this.row + 1, this.col, findNewDirection(MOVEMENT.TURNR));
+                LRRight.setSensor(this.row + 1, this.col-1, findNewDirection(MOVEMENT.TURNR));
                 break;
         }
 

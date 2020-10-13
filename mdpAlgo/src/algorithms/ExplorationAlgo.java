@@ -356,8 +356,8 @@ public class ExplorationAlgo {
                 moveBot(MOVEMENT.CALIBRATE);
             } else {
                 lastCalibrate++;
-                //calibrate after 3 steps
-                if (lastCalibrate >= 3) {
+                //calibrate after 5 steps
+                if (lastCalibrate >= 5) {
                     DIRECTION targetDir = getCalibrationDirection();
                     if (targetDir != null) {
                         lastCalibrate = 0;

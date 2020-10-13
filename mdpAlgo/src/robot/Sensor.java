@@ -107,11 +107,11 @@ public class Sensor {
 
             if (!exploredMap.checkValidCoordinates(row, col)) continue;
             
-            if (exploredMap.getCell(row, col).getIsExplored()) {
-            	if (id.equals("SRLB") || id.equals("SRLF") || id.equals("LRL")) {
-            		continue;
-            	}
-            }
+//            if (exploredMap.getCell(row, col).getIsExplored()) {
+//            	if (id.equals("SRLB") || id.equals("SRLF") || id.equals("LRL")) {
+//            		continue;
+//            	}
+//            }
             
             exploredMap.getCell(row, col).setIsExplored(true);
 
