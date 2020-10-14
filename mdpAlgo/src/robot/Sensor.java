@@ -106,12 +106,11 @@ public class Sensor {
             int col = this.sensorPosCol + (colInc * i);
 
             if (!exploredMap.checkValidCoordinates(row, col)) continue;
-            
-//            if (exploredMap.getCell(row, col).getIsExplored()) {
-//            	if (id.equals("SRLB") || id.equals("SRLF") || id.equals("LRL")) {
-//            		continue;
-//            	}
-//            }
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+            // Do NOT override previous obstacle value if right sensors detect obstacle/no obstacle
+//            if (exploredMap.getCell(row, col).getIsExplored() && (id.equals("LRL"))) continue;
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
             
             exploredMap.getCell(row, col).setIsExplored(true);
 
