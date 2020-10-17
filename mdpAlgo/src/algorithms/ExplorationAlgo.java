@@ -135,6 +135,16 @@ public class ExplorationAlgo {
     private void explorationLoop(int r, int c) {
         do {
             updateVisited(bot.getRow(), bot.getCol());
+            if (checkLeftWallObs()) {
+            	rPiCapture();
+            }
+            if (checkRightWallObs()) {
+            	bot.move(MOVEMENT.TURNR);
+            	bot.move(MOVEMENT.TURNR);
+            	rPiCapture();
+            	bot.move(MOVEMENT.TURNR);
+            	bot.move(MOVEMENT.TURNR);
+            }
             nextMove();
             areaExplored = calculateAreaExplored();
             System.out.println("Area explored: " + areaExplored);
@@ -159,6 +169,84 @@ public class ExplorationAlgo {
 
         goHome();
     }
+    
+    
+    
+    /** 
+     * Send coordinates of the left cell of the robot to be captured by the camera
+     */
+    private void rPiCapture() {
+    	int botRow = bot.getRow();
+        int botCol = bot.getCol();
+        int imgRow;
+        int imgCol;
+        switch (bot.getrobotDir()) {
+    	case UP:
+    		imgRow = botRow;
+    		imgCol = botCol - 2;
+    		break;
+    	case RIGHT:
+    		imgRow = botRow + 2;
+    		imgCol = botCol;
+    		break;
+    	case DOWN:
+    		imgRow = botRow;
+    		imgCol = botCol + 2;
+    		break;
+    	case LEFT:
+    		imgRow = botRow - 2;
+    		imgCol = botCol;
+    		break;
+    	default:
+    		imgRow = -1;
+    		imgCol = -1;
+    	}
+        if (imgRow != -1 && imgCol != -1) {
+	        CommMgr commMgr = CommMgr.getCommMgr();
+	        commMgr.sendMsg(imgRow + "," + imgCol, CommMgr.IMG_POS);
+	        
+	        while (true) {
+                System.out.println("Waiting for image capture...");
+                String msg = CommMgr.getCommMgr().recvMsg();
+                //String[] msgArr = msg.split(";");
+                if (msg.equals(CommMgr.IMG_TAKEN)) break;
+            }
+	        System.out.println("Image captured.");
+        }
+        
+    }
+    
+    private boolean checkLeftWallObs() {
+    	int botRow = bot.getRow();
+        int botCol = bot.getCol();
+    	switch (bot.getrobotDir()) {
+    	case UP:
+    		return (isExploredIsObstacle(botRow, botCol - 2));
+    	case RIGHT:
+    		return (isExploredIsObstacle(botRow + 2, botCol));
+    	case DOWN:
+    		return (isExploredIsObstacle(botRow, botCol + 2));
+    	case LEFT:
+    		return (isExploredIsObstacle(botRow - 2, botCol));
+    	}
+    	return false;
+    }
+    
+    private boolean checkRightWallObs() {
+    	int botRow = bot.getRow();
+        int botCol = bot.getCol();
+    	switch (bot.getrobotDir()) {
+    	case UP:
+    		return (isExploredIsObstacle(botRow, botCol + 2));
+    	case RIGHT:
+    		return (isExploredIsObstacle(botRow - 2, botCol));
+    	case DOWN:
+    		return (isExploredIsObstacle(botRow, botCol - 2));
+    	case LEFT:
+    		return (isExploredIsObstacle(botRow + 2, botCol));
+    	}
+    	return false;
+    }
 
     /**
      * Determines the next move for the robot and executes it accordingly.
@@ -177,6 +265,8 @@ public class ExplorationAlgo {
             moveBot(MOVEMENT.TURNR);
         }
     }
+    
+    
 
     /**
      * Returns true if the right side of the robot is free to move into.
@@ -307,6 +397,14 @@ public class ExplorationAlgo {
             return (tmp.getIsExplored() && !tmp.getIsObstacle());
         }
         return false;
+    }
+    
+    private boolean isExploredIsObstacle(int r, int c) {
+    	if (exploredMap.checkValidCoordinates(r,  c)) {
+    		Cell tmp = exploredMap.getCell(r, c);
+    		return (tmp.getIsExplored() && tmp.getIsObstacle());
+    	}
+    	return false;
     }
 
     /**
