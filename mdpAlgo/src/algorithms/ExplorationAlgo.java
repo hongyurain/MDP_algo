@@ -203,7 +203,7 @@ public class ExplorationAlgo {
     	}
         if (imgRow != -1 && imgCol != -1) {
 	        CommMgr commMgr = CommMgr.getCommMgr();
-	        commMgr.sendMsg(imgRow + "," + imgCol, CommMgr.IMG_POS);
+	        commMgr.sendMsg("ic" + imgRow + "," + imgCol, CommMgr.IMG_POS);
 	        
 	        while (true) {
                 System.out.println("Waiting for image capture...");
