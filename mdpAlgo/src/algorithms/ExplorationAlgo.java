@@ -136,14 +136,14 @@ public class ExplorationAlgo {
         do {
             updateVisited(bot.getRow(), bot.getCol());
             if (checkLeftWallObs()) {
-            	rPiCapture();
+            	rPiCapture(bot.getrobotDir().toString());
             }
             if (checkRightWallObs()) {
-            	bot.move(MOVEMENT.TURNR);
-            	bot.move(MOVEMENT.TURNR);
-            	rPiCapture();
-            	bot.move(MOVEMENT.TURNR);
-            	bot.move(MOVEMENT.TURNR);
+            	moveBot(MOVEMENT.TURNR);
+            	moveBot(MOVEMENT.TURNR);
+            	rPiCapture(bot.getrobotDir().toString());
+            	moveBot(MOVEMENT.TURNR);
+            	moveBot(MOVEMENT.TURNR);
             }
             nextMove();
             areaExplored = calculateAreaExplored();
@@ -175,7 +175,7 @@ public class ExplorationAlgo {
     /** 
      * Send coordinates of the left cell of the robot to be captured by the camera
      */
-    private void rPiCapture() {
+    private void rPiCapture(String s) {
     	int botRow = bot.getRow();
         int botCol = bot.getCol();
         int imgRow;
@@ -203,7 +203,7 @@ public class ExplorationAlgo {
     	}
         if (imgRow != -1 && imgCol != -1) {
 	        CommMgr commMgr = CommMgr.getCommMgr();
-	        commMgr.sendMsg("ic" + imgRow + "," + imgCol, CommMgr.IMG_POS);
+	        commMgr.sendMsg("ic" + imgRow + "," + imgCol + "," + s, CommMgr.IMG_POS);
 	        
 	        while (true) {
                 System.out.println("Waiting for image capture...");
@@ -215,7 +215,7 @@ public class ExplorationAlgo {
         }
         
     }
-    
+
     private boolean checkLeftWallObs() {
     	int botRow = bot.getRow();
         int botCol = bot.getCol();
@@ -235,7 +235,7 @@ public class ExplorationAlgo {
     private boolean checkRightWallObs() {
     	int botRow = bot.getRow();
         int botCol = bot.getCol();
-    	switch (bot.getrobotDir()) {
+        switch (bot.getrobotDir()) {
     	case UP:
     		return (isExploredIsObstacle(botRow, botCol + 2));
     	case RIGHT:
@@ -245,7 +245,7 @@ public class ExplorationAlgo {
     	case LEFT:
     		return (isExploredIsObstacle(botRow + 2, botCol));
     	}
-    	return false;
+        return false;
     }
 
     /**
@@ -366,7 +366,8 @@ public class ExplorationAlgo {
 
         FastestPathAlgo returnToStart = new FastestPathAlgo(exploredMap, bot, realMap);
         returnToStart.runFastestPath(RobotConstants.START_ROW, RobotConstants.START_COL);
-
+        
+        rPiCapture("end");
         System.out.println("Exploration complete!");
         areaExplored = calculateAreaExplored();
         System.out.printf("%.2f%% Coverage", (areaExplored / 300.0) * 100.0);
