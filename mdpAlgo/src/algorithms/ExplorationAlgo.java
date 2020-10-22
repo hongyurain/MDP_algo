@@ -59,26 +59,26 @@ public class ExplorationAlgo {
                 if (msg.equals(CommMgr.EX_START)) break;
             }
             if (bot.getRealBot()) {
-//                bot.move(MOVEMENT.TURNR, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNR, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();                                                      
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
+                bot.move(MOVEMENT.TURNR, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNR, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();                                                      
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
                 
                 
 //                CommMgr.getCommMgr().recvMsg();                                                      
@@ -141,12 +141,12 @@ public class ExplorationAlgo {
      */
     private void explorationLoop(int r, int c) {
         do {
-            updateVisited(bot.getRow(), bot.getCol());
-            if (checkLeftWallObs()) {
+        	
+    		if (checkLeftWallObs()) {
             	System.out.println("Left wall detected, taking image");
             	rPiCapture();
             }
-            if (checkRightWallObs() && !checkFrontWallObs()) {
+            if (checkRightWallObs()) {
             	System.out.println("Right wall detected, taking image");
             	moveBot(MOVEMENT.TURNR);
             	moveBot(MOVEMENT.TURNR);
@@ -154,10 +154,14 @@ public class ExplorationAlgo {
             	moveBot(MOVEMENT.TURNR);
             	moveBot(MOVEMENT.TURNR);
             }
+        		
+        	updateVisited(bot.getRow(), bot.getCol());
             nextMove();
             areaExplored = calculateAreaExplored();
             System.out.println("Area explored: " + areaExplored);
-
+            
+            
+            
             if (bot.getRow() == r && bot.getCol() == c) {
                 if (areaExplored >= 100) {
                     break;
@@ -179,8 +183,7 @@ public class ExplorationAlgo {
         goHome();
     }
     
-    
-    
+   
     /** 
      * Send coordinates of the left cell of the robot to be captured by the camera
      */
@@ -212,8 +215,8 @@ public class ExplorationAlgo {
     		imgCol = -1;
     	}
         if (imgRow != -1 && imgCol != -1) {
-			System.out.println("Take pic?");
-			String tes = myObj.nextLine();
+//			System.out.println("Take pic?");
+//			String tes = myObj.nextLine();
 	        CommMgr commMgr = CommMgr.getCommMgr();
 	        commMgr.sendMsg("ic" + imgRow + "," + imgCol + "," + bot.getrobotDir().toString(), CommMgr.IMG_POS);
 	        
@@ -294,7 +297,9 @@ public class ExplorationAlgo {
             if (lookForward()) moveBot(MOVEMENT.FORWARD);
         } else {
             moveBot(MOVEMENT.TURNR);
+            if (checkLeftWallObs()) rPiCapture();
             moveBot(MOVEMENT.TURNR);
+            if (checkLeftWallObs()) rPiCapture();
         }
     }
     
@@ -399,7 +404,7 @@ public class ExplorationAlgo {
         FastestPathAlgo returnToStart = new FastestPathAlgo(exploredMap, bot, realMap);
         returnToStart.runFastestPath(RobotConstants.START_ROW, RobotConstants.START_COL);
         
-        rPiCaptureEnd();
+//        rPiCaptureEnd();
         System.out.println("Exploration complete!");
         areaExplored = calculateAreaExplored();
         System.out.printf("%.2f%% Coverage", (areaExplored / 300.0) * 100.0);
@@ -582,7 +587,6 @@ public class ExplorationAlgo {
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
         turnBotDirection(origDir);
-        rPiCapture();
         //moveBot(MOVEMENT.CALIBRATEL);		
     }
 
