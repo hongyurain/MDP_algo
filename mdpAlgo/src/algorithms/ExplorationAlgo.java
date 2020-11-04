@@ -604,8 +604,8 @@ public class ExplorationAlgo {
                 moveBot(MOVEMENT.TURNR);
             }
         } else if (numOfTurn == 2) {
-            moveBot(MOVEMENT.TURNL);
-            moveBot(MOVEMENT.TURNL);
+            moveBot(MOVEMENT.TURNR);
+            moveBot(MOVEMENT.TURNR);
         }
     }
 }
