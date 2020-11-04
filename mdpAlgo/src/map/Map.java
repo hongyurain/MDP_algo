@@ -9,7 +9,6 @@ import java.awt.*;
 /**
  * Represents the entire map grid for the arena.
  *
- * @author Suyash Lakhotia
  */
 
 public class Map extends JPanel {

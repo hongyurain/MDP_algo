@@ -14,9 +14,6 @@ import map.Visited;
 
 /**
  * Exploration algorithm for the robot.
- *
- * @author Priyanshu Singh
- * @author Suyash Lakhotia
  */
 
 public class ExplorationAlgo {
@@ -74,13 +71,6 @@ public class ExplorationAlgo {
                 CommMgr.getCommMgr().recvMsg();                                                      
                 bot.move(MOVEMENT.TURNL, false);
                 exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();                                                      
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-//
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATEL, false);	
-//                exploredMap.repaint();
                 
             }
             CommMgr.getCommMgr().recvMsg();

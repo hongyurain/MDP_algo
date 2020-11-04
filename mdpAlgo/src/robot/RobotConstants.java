@@ -3,7 +3,6 @@ package robot;
 /**
  * Constants used in this package.
  *
- * @author Suyash Lakhotia
  */
 
 public class RobotConstants {

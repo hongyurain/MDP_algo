@@ -7,7 +7,6 @@ import robot.RobotConstants.DIRECTION;
 /**
  * Represents a sensor mounted on the robot.
  *
- * @author Yilin
  */
 
 public class Sensor {

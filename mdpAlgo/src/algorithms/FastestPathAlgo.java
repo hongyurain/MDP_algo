@@ -20,7 +20,6 @@ import java.util.Stack;
  * g(n) = Real Cost from START to n
  * h(n) = Heuristic Cost from n to GOAL
  *
- * @author Yilin, Hongyu
  ********** costH might be improved. *************
  */
 // @formatter:on
