@@ -175,11 +175,35 @@ public class ExplorationAlgo {
     /** 
      * Send coordinates of the left cell of the robot to be captured by the camera
      */
-    private void rPiCapture(int row, int col, String botDir) {
-
-        if (row != -1 && col != -1) {
+    private void rPiCapture(String s) {
+    	int botRow = bot.getRow();
+        int botCol = bot.getCol();
+        int imgRow;
+        int imgCol;
+        switch (bot.getrobotDir()) {
+    	case UP:
+    		imgRow = botRow;
+    		imgCol = botCol - 2;
+    		break;
+    	case RIGHT:
+    		imgRow = botRow + 2;
+    		imgCol = botCol;
+    		break;
+    	case DOWN:
+    		imgRow = botRow;
+    		imgCol = botCol + 2;
+    		break;
+    	case LEFT:
+    		imgRow = botRow - 2;
+    		imgCol = botCol;
+    		break;
+    	default:
+    		imgRow = -1;
+    		imgCol = -1;
+    	}
+        if (imgRow != -1 && imgCol != -1) {
 	        CommMgr commMgr = CommMgr.getCommMgr();
-	        commMgr.sendMsg("ic" + row + "," + col + "," + botDir, CommMgr.IMG_POS);
+	        commMgr.sendMsg("ic" + imgRow + "," + imgCol + "," + s, CommMgr.IMG_POS);
 	        
 	        while (true) {
                 System.out.println("Waiting for image capture...");
@@ -189,35 +213,23 @@ public class ExplorationAlgo {
             }
 	        System.out.println("Image captured.");
         }
-    }
-    
-    private void recvImage() {
-    	CommMgr commMgr = CommMgr.getCommMgr();
-    	while (true) {
-    		System.out.println("Waiting for image file...");
-    		String msg = CommMgr.getCommMgr().recvMsg();
-    		if (msg.substring(0, 3) == "img") {
-    			String imgString = msg.substring(3);
-    			
-    			
-    		}
-    	}
+        
     }
 
-    private void checkLeftWallObs() {
+    private boolean checkLeftWallObs() {
     	int botRow = bot.getRow();
         int botCol = bot.getCol();
-        String botDir = bot.getrobotDir().toString();
     	switch (bot.getrobotDir()) {
     	case UP:
-    		if (isExploredIsObstacle(botRow, botCol - 2)) rPiCapture(botRow, botCol-2, botDir);
+    		return (isExploredIsObstacle(botRow, botCol - 2));
     	case RIGHT:
-    		if (isExploredIsObstacle(botRow + 2, botCol)) rPiCapture(botRow+2, botCol, botDir);
+    		return (isExploredIsObstacle(botRow + 2, botCol));
     	case DOWN:
-    		if (isExploredIsObstacle(botRow, botCol + 2)) rPiCapture(botRow, botCol+2, botDir);
+    		return (isExploredIsObstacle(botRow, botCol + 2));
     	case LEFT:
-    		if (isExploredIsObstacle(botRow - 2, botCol)) rPiCapture(botRow-2, botCol, botDir);
+    		return (isExploredIsObstacle(botRow - 2, botCol));
     	}
+    	return false;
     }
     
     private boolean checkRightWallObs() {
@@ -525,8 +537,6 @@ public class ExplorationAlgo {
 
         return null;
     }
-    
-
 
     /**
      * Turns the bot in the needed direction and sends the CALIBRATE movement. Once calibrated, the bot is turned back
