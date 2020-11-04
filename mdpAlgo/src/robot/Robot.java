@@ -35,8 +35,8 @@ public class Robot {
 	 *  
 	 *  			  (s3_1) (s2_1) (s1_1)
 	 *  			  (s3_0) (s2_0) (s1_0)
-	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) 
-	 *                (ROBO) (ROBO) (ROBO) (s6_0) (s6_1) (s6_2) (s6_3) (s6_4)
+	 *  (s4_1) (s4_0) (ROBO) (ROBO) (ROBO) (s6_0) (s6_1) (s6_2) (s6_3)
+	 *                (ROBO) (ROBO) (ROBO)
 	 *  (s5_1) (s5_0) (ROBO) (ROBO) (ROBO)
 	 *  
 	 */
