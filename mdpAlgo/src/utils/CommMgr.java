@@ -25,8 +25,6 @@ public class CommMgr {
     public static final String BOT_START = "BOT_START";     // PC --> Arduino : (no use)send null (type BOT_START) to Arduino to start the bot
     public static final String INSTRUCTIONS = "INSTR";      // PC --> Arduino : during fastest path - send the whole fastest path movement (fpinstructions) to Arduino eg. "fpath"+"fbrlce"+"z" 
 	public static final String SENSOR_DATA = "SDATA";       // Arduino --> PC : receive sensor data from Arduino eg. "pc:obs:5|0|2|1|2|1|msgcount0"
-	public static final String IMG_POS = "IMG_POS";
-	public static final String IMG_TAKEN = "IMG_TAKEN";
 
     private static CommMgr commMgr = null;
     private static Socket conn = null;
