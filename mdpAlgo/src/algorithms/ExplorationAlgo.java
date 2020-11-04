@@ -8,10 +8,6 @@ import robot.RobotConstants;
 import robot.RobotConstants.DIRECTION;
 import robot.RobotConstants.MOVEMENT;
 import utils.CommMgr;
-import java.util.Scanner;
-
-import java.util.Scanner;
-
 import algorithms.FastestPathAlgo;
 import utils.MapDescriptor;
 import map.Visited;
@@ -34,7 +30,6 @@ public class ExplorationAlgo {
     private long endTime;
     private int lastCalibrate;
     private boolean calibrationMode;
-    Scanner myObj = new Scanner(System.in);
 
     public ExplorationAlgo(Map exploredMap, Map realMap, Robot bot, int coverageLimit, int timeLimit) {
         this.exploredMap = exploredMap;
@@ -59,28 +54,26 @@ public class ExplorationAlgo {
                 if (msg.equals(CommMgr.EX_START)) break;
             }
             if (bot.getRealBot()) {
-//                bot.move(MOVEMENT.TURNR, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNR, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();
-//                bot.move(MOVEMENT.CALIBRATE, false);
-//                exploredMap.repaint();
-//                CommMgr.getCommMgr().recvMsg();                                                      
-//                bot.move(MOVEMENT.TURNL, false);
-//                exploredMap.repaint();
-                
-                
+                bot.move(MOVEMENT.TURNR, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNR, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();
+                bot.move(MOVEMENT.CALIBRATE, false);
+                exploredMap.repaint();
+                CommMgr.getCommMgr().recvMsg();                                                      
+                bot.move(MOVEMENT.TURNL, false);
+                exploredMap.repaint();
 //                CommMgr.getCommMgr().recvMsg();                                                      
 //                bot.move(MOVEMENT.TURNL, false);
 //                exploredMap.repaint();
@@ -90,7 +83,7 @@ public class ExplorationAlgo {
 //                exploredMap.repaint();
                 
             }
-//            CommMgr.getCommMgr().recvMsg();
+            CommMgr.getCommMgr().recvMsg();
             
         }
 
@@ -143,14 +136,12 @@ public class ExplorationAlgo {
         do {
             updateVisited(bot.getRow(), bot.getCol());
             if (checkLeftWallObs()) {
-            	System.out.println("Left wall detected, taking image");
-            	rPiCapture();
+            	rPiCapture(bot.getrobotDir().toString());
             }
-            if (checkRightWallObs() && !checkFrontWallObs()) {
-            	System.out.println("Right wall detected, taking image");
+            if (checkRightWallObs()) {
             	moveBot(MOVEMENT.TURNR);
             	moveBot(MOVEMENT.TURNR);
-            	rPiCapture();
+            	rPiCapture(bot.getrobotDir().toString());
             	moveBot(MOVEMENT.TURNR);
             	moveBot(MOVEMENT.TURNR);
             }
@@ -184,38 +175,11 @@ public class ExplorationAlgo {
     /** 
      * Send coordinates of the left cell of the robot to be captured by the camera
      */
-    private void rPiCapture() {
-    	int imgRow;
-    	int imgCol;
-    	int botRow = bot.getRow();
-    	int botCol = bot.getCol();
-    	
-    	switch(bot.getrobotDir()) {
-    	case UP:
-    		imgRow = botRow;
-    		imgCol = botCol-2;
-    		break;
-    	case DOWN:
-    		imgRow = botRow;
-    		imgCol = botCol-2;
-    		break;
-    	case LEFT:
-    		imgRow = botRow-2;
-    		imgCol = botCol;
-    		break;
-    	case RIGHT:
-    		imgRow = botRow+2;
-    		imgCol = botCol;
-    		break;
-    	default:
-    		imgRow = -1;
-    		imgCol = -1;
-    	}
-        if (imgRow != -1 && imgCol != -1) {
-			System.out.println("Take pic?");
-			String tes = myObj.nextLine();
+    private void rPiCapture(int row, int col, String botDir) {
+
+        if (row != -1 && col != -1) {
 	        CommMgr commMgr = CommMgr.getCommMgr();
-	        commMgr.sendMsg("ic" + imgRow + "," + imgCol + "," + bot.getrobotDir().toString(), CommMgr.IMG_POS);
+	        commMgr.sendMsg("ic" + row + "," + col + "," + botDir, CommMgr.IMG_POS);
 	        
 	        while (true) {
                 System.out.println("Waiting for image capture...");
@@ -227,25 +191,33 @@ public class ExplorationAlgo {
         }
     }
     
-    private void rPiCaptureEnd() {
+    private void recvImage() {
     	CommMgr commMgr = CommMgr.getCommMgr();
-        commMgr.sendMsg("ic" + -1 + "," + -1 + "," + "end", CommMgr.IMG_POS);
+    	while (true) {
+    		System.out.println("Waiting for image file...");
+    		String msg = CommMgr.getCommMgr().recvMsg();
+    		if (msg.substring(0, 3) == "img") {
+    			String imgString = msg.substring(3);
+    			
+    			
+    		}
+    	}
     }
 
-    private boolean checkLeftWallObs() {
+    private void checkLeftWallObs() {
     	int botRow = bot.getRow();
         int botCol = bot.getCol();
+        String botDir = bot.getrobotDir().toString();
     	switch (bot.getrobotDir()) {
     	case UP:
-    		return (isExploredIsObstacle(botRow, botCol - 2));
+    		if (isExploredIsObstacle(botRow, botCol - 2)) rPiCapture(botRow, botCol-2, botDir);
     	case RIGHT:
-    		return (isExploredIsObstacle(botRow + 2, botCol));
+    		if (isExploredIsObstacle(botRow + 2, botCol)) rPiCapture(botRow+2, botCol, botDir);
     	case DOWN:
-    		return (isExploredIsObstacle(botRow, botCol + 2));
+    		if (isExploredIsObstacle(botRow, botCol + 2)) rPiCapture(botRow, botCol+2, botDir);
     	case LEFT:
-    		return (isExploredIsObstacle(botRow - 2, botCol));
+    		if (isExploredIsObstacle(botRow - 2, botCol)) rPiCapture(botRow-2, botCol, botDir);
     	}
-    	return false;
     }
     
     private boolean checkRightWallObs() {
@@ -260,22 +232,6 @@ public class ExplorationAlgo {
     		return (isExploredIsObstacle(botRow, botCol - 2));
     	case LEFT:
     		return (isExploredIsObstacle(botRow + 2, botCol));
-    	}
-        return false;
-    }
-    
-    private boolean checkFrontWallObs() {
-    	int botRow = bot.getRow();
-        int botCol = bot.getCol();
-        switch (bot.getrobotDir()) {
-    	case UP:
-    		return (isExploredIsObstacle(botRow + 2, botCol));
-    	case RIGHT:
-    		return (isExploredIsObstacle(botRow, botCol + 2));
-    	case DOWN:
-    		return (isExploredIsObstacle(botRow - 2, botCol));
-    	case LEFT:
-    		return (isExploredIsObstacle(botRow, botCol - 2));
     	}
         return false;
     }
@@ -399,7 +355,7 @@ public class ExplorationAlgo {
         FastestPathAlgo returnToStart = new FastestPathAlgo(exploredMap, bot, realMap);
         returnToStart.runFastestPath(RobotConstants.START_ROW, RobotConstants.START_COL);
         
-        rPiCaptureEnd();
+        rPiCapture("end");
         System.out.println("Exploration complete!");
         areaExplored = calculateAreaExplored();
         System.out.printf("%.2f%% Coverage", (areaExplored / 300.0) * 100.0);
@@ -487,8 +443,8 @@ public class ExplorationAlgo {
                 moveBot(MOVEMENT.CALIBRATE);
             } else {
                 lastCalibrate++;
-                //calibrate after 4 steps
-                if (lastCalibrate >= 4) {
+                //calibrate after 5 steps
+                if (lastCalibrate >= 5) {
                     DIRECTION targetDir = getCalibrationDirection();
                     if (targetDir != null) {
                         lastCalibrate = 0;
@@ -582,7 +538,6 @@ public class ExplorationAlgo {
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
         turnBotDirection(origDir);
-        rPiCapture();
         //moveBot(MOVEMENT.CALIBRATEL);		
     }
 
