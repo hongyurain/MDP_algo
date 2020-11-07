@@ -8,7 +8,6 @@ import robot.RobotConstants;
 import robot.RobotConstants.DIRECTION;
 import robot.RobotConstants.MOVEMENT;
 import utils.CommMgr;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -19,8 +18,6 @@ import java.util.Stack;
  *
  * g(n) = Real Cost from START to n
  * h(n) = Heuristic Cost from n to GOAL
- *
- ********** costH might be improved. *************
  */
 // @formatter:on
 
@@ -305,7 +302,7 @@ public class FastestPathAlgo {
             outputString.append(MOVEMENT.print(m));
         }
 
-        if (!bot.getRealBot() || explorationMode) {													///////////////////////////
+        if (!bot.getRealBot() || explorationMode) {													
             for (MOVEMENT x : movements) {
                 if (x == MOVEMENT.FORWARD) {
                     if (!canMoveForward()) {
@@ -314,8 +311,8 @@ public class FastestPathAlgo {
                     }
                 }
 
-                bot.move(x);																		///////////////////////////
-                this.exploredMap.repaint();															///////////////////////////
+                bot.move(x);																		
+                this.exploredMap.repaint();															
 
                 // During exploration, use sensor data to update exploredMap.
                 if (explorationMode) {
@@ -329,41 +326,28 @@ public class FastestPathAlgo {
             for (MOVEMENT x : movements) {
                 if (x == MOVEMENT.FORWARD) {
                     fCount++;
-                    // if (fCount == 10) {
-                    //     bot.moveForwardMultiple(fCount);
-                    //     fCount = 0;
-                    //     exploredMap.repaint();
-                    // }
-                    
                 } else if (x == MOVEMENT.TURNR || x == MOVEMENT.TURNL) {
                     if (fCount > 0) {
                         fpInstructions.append(((char)(fCount+64)));
-                        // bot.moveForwardMultiple(fCount);
                         fCount = 0;
-                        // exploredMap.repaint();
                     if (x == MOVEMENT.TURNR){
                         bot.setRobotDir(DIRECTION.getPrevious(bot.getrobotDir()));
                     } else {
                         bot.setRobotDir(DIRECTION.getNext(bot.getrobotDir()));
                         }
                     }
-                    fpInstructions.append(MOVEMENT.print(x));
-
-                    //bot.move(x);															//////////////////
-                    exploredMap.repaint();													//////////////////
+                    fpInstructions.append(MOVEMENT.print(x));											
+                    exploredMap.repaint();													
                 }
             }
             if (fCount > 0) {
                 fpInstructions.append(((char)(fCount+64)));
-                // bot.moveForwardMultiple(fCount);
-                // exploredMap.repaint();
             }
         }
 
-        System.out.println("\nMovements: " + outputString.toString());						///////////////////
-        System.out.println("Fastest path message to arduino" + fpInstructions.toString());	///////////////////
-        //CommMgr.getCommMgr().sendMsg(fpInstructions.toString(), CommMgr.INSTRUCTIONS);    // might need to change if arduino cant receive multiple forwards in 1 instruction 
-        return fpInstructions.toString();												    ///////////////////
+        System.out.println("\nMovements: " + outputString.toString());						
+        System.out.println("Fastest path message to arduino" + fpInstructions.toString());	
+        return fpInstructions.toString();												   
     }
 
     /**

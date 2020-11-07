@@ -7,7 +7,6 @@ import robot.RobotConstants.DIRECTION;
 import robot.RobotConstants.MOVEMENT;
 import utils.*;
 import java.util.Scanner;
-
 import java.util.concurrent.TimeUnit;
 
 public class Robot {
@@ -164,8 +163,6 @@ public class Robot {
                 System.out.println("Error in Robot.move()!");
                 break;
         }
-//        System.out.println("Go next move?");
-//        String tes = myObj.nextLine();
         if (realBot) sendMovement(m, false);
         else System.out.println("Move: " + MOVEMENT.print(m));
 

@@ -2,7 +2,6 @@ package utils;
 
 import map.Map;
 import map.MapConstants;
-
 import java.io.*;
 
 /**

@@ -21,7 +21,6 @@ import static utils.MapDescriptor.loadMapFromDisk;
 
 /**
  * Simulator for robot navigation in virtual arena.
- *
  */
 
 public class Simulator {
@@ -65,8 +64,6 @@ public class Simulator {
 
         int start_row = RobotConstants.START_ROW;
         int start_col = RobotConstants.START_COL;
-        //listen if got start coors
-        //update start_row, start_col
         
         bot = new Robot(start_row, start_col, realRun);
 
@@ -303,22 +300,11 @@ public class Simulator {
 
                 ExplorationAlgo exploration;
                 exploration = new ExplorationAlgo(exploredMap, realMap, bot, coverageLimit, timeLimit);
-
-//                if (realRun) {
-//                    CommMgr.getCommMgr().sendMsg(null, CommMgr.BOT_START);
-//                }
-
+                
                 exploration.runExploration();
             	System.out.println("Just finished exploration.runExploration(); WE ARE GONNA RUN generateMapDescriptor(exploredMap);");
                 generateMapDescriptor(exploredMap);
                 System.out.println("Just finished generateMapDescriptor(exploredMap);");
-                
-                // for(int i=0; i<20;i++){
-                //     for(int j=0;j<15;j++){
-                //         System.out.print(Visited.visitedArr[i][j]);
-                //     }
-                //     System.out.println();
-                // }
 
                 if (realRun) {
                 	System.out.println("WE ARE GONNA RUN FastestPath().execute();");

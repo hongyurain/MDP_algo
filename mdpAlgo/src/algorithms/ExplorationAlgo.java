@@ -43,11 +43,9 @@ public class ExplorationAlgo {
         if (bot.getRealBot()) {
             System.out.println("Starting calibration1...");
 
-            //CommMgr.getCommMgr().recvMsg();
             while (true) {
                 System.out.println("Waiting for EX_START...");
                 String msg = CommMgr.getCommMgr().recvMsg();
-                //String[] msgArr = msg.split(";");
                 if (msg.equals(CommMgr.EX_START)) break;
             }
             if (bot.getRealBot()) {
@@ -82,14 +80,8 @@ public class ExplorationAlgo {
         startTime = System.currentTimeMillis();
         endTime = startTime + (timeLimit * 1000);
 
-//        if (bot.getRealBot()) {
-//            CommMgr.getCommMgr().sendMsg(null, CommMgr.BOT_START);
-//        }
-        // senseAndRepaint();
         bot.setSensors();
-        // bot.sense(exploredMap, realMap);
         exploredMap.repaint();
-
 
         areaExplored = calculateAreaExplored();
         System.out.println("Explored Area: " + areaExplored);
@@ -135,17 +127,6 @@ public class ExplorationAlgo {
                 }
             }
         } while (areaExplored <= coverageLimit && System.currentTimeMillis() <= endTime);
-        
-        /*int countNoOfRevisits = 0;
-        while (areaExplored <= coverageLimit && System.currentTimeMillis() <= endTime && countNoOfRevisits < 4){
-            countNoOfRevisits++;
-            
-            //calcualate the rectangle
-            
-            FastestPathAlgo fp;
-            fp = new FastestPathAlgo(exploredMap, bot);
-
-        }*/
 
         goHome();
     }
@@ -438,8 +419,7 @@ public class ExplorationAlgo {
 
         turnBotDirection(targetDir);
         moveBot(MOVEMENT.CALIBRATE);
-        turnBotDirection(origDir);
-        //moveBot(MOVEMENT.CALIBRATEL);		
+        turnBotDirection(origDir);	
     }
 
     /**

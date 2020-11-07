@@ -8,7 +8,6 @@ import robot.RobotConstants.DIRECTION;
 
 /**
  * Communication manager to communicate with the different parts of the system via the RasPi.
- *
  */
 
 public class CommMgr {
@@ -94,12 +93,10 @@ public class CommMgr {
         try {
             String outputMsg;
             if (msg == null) {
-                outputMsg = msgType + "\n";
-//            } else if (msgType.equals(MAP_STRINGS) || msgType.equals(BOT_POS)) {
-//                outputMsg = msg;														/////////"AN"+ +"Q" 
+                outputMsg = msgType + "\n";												 
             } 
             else {
-                outputMsg = msg;														/////////"AR"+ +"Q" 
+                outputMsg = msg;													
             }
 
             System.out.println("Sending out message:\n" + outputMsg);
